@@ -1,7 +1,0 @@
-on chat:
-    if message contains "http":
-        cancel event
-        broadcast formatted "%Chat_getPlayerHeadIcon(player)% %player%: <link:%message%>§7[§3LINK§7]"
-    else if message contains "www.":
-        cancel event
-        broadcast formatted "%Chat_getPlayerHeadIcon(player)% %player%: <link:https://%message%>§7[§3LINK§7]"
