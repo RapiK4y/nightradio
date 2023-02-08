@@ -1,0 +1,168 @@
+options:
+    t: &7[&6&l!&7]
+
+on load:
+    if {chattings} is not set:
+        set {chattings} to true
+    if {pvp} is not set:
+        set {pvp} to true
+
+on chat:
+    if {chattings} is false:
+        if player is not op:
+            cancel event
+            message "{@t} 현재 채팅이 불가능합니다. 사유: &c서버 채팅 비활성화 상태" to the player
+    if {mutes.%player%} is true:
+        cancel event
+        message "{@t} 현재 채팅이 불가능합니다. 사유: &c벙어리 상태" to the player
+
+on chat:
+    set {_cooldown} to difference between {cool.chat.%player%} and now
+    if {_cooldown} < {chatcool}:
+        if player is op:
+            stop
+        cancel event
+        set {_send} to {chatcool}
+        subtract {_cooldown} from {_send}
+        set {_send} to "%{_send}%"
+        replace all "and " with "" in {_send}
+        replace all "days" and "day" with " 일" in {_send}
+        replace all "hours" and "hour" with " 시간" in {_send}
+        replace all " minutes" and " minute" with " 분" in {_send}
+        replace all " seconds" and " second" with " 초" in {_send}
+        send "{@t} &c도배 방지를 위해 &f[ %{_send}% ] &c후 다시 입력해주세요." to player
+        stop
+    set {cool.chat.%player%} to now
+
+
+on damage:
+    attacker is a player
+    victim is a player
+    {pvp} is false
+    cancel event
+    message "{@t} 현재 PVP가 불가능합니다." to the attacker
+
+command /chatcool [<number>]:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if arg-1 >= 0:
+                set {chatcool} to "%arg-1% seconds" parsed as timespan
+                message "{@t} 채팅 간 간격이 &a%arg-1%&7초로 설정되었습니다." to the player
+                play sound "ENTITY_EXPERIENCE_ORB_PICKUP" to the player
+            else:
+                message "{@t} 채팅 간 간격은 0초 이상이여야 합니다." to the player
+        else:
+            message "{@t} 사용법: /chatcool <간격>" to the player
+
+command /color [<OfflinePlayer>]:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if arg-1 is online:
+                if {color.%arg-1%} is not true:
+                    set {color.%arg-1%} to true
+                    set arg-1's display name to "&d%arg-1%"
+                    set arg-1's tab list name to "&d%arg-1%"
+                    message "{@t} &a%arg-1%&7의 닉네임 강조가 설정되었습니다." to the player
+                else if {color.%arg-1%} is true:
+                    set {color.%arg-1%} to false
+                    reset arg-1's display name
+                    reset arg-1's tab list name
+                    message "{@t} &a%arg-1%&7의 닉네임 강조를 해제합니다." to the player
+            else:
+                message "{@t} &a%arg-1%&7은(는) 현재 오프라인입니다." to the player
+        else:
+            message "{@t} 사용법: /color <플레이어>" to the player
+
+command /seen [<OfflinePlayer>]:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if arg-1 is online:
+                message "&a&l%arg-1%&7의 IP 주소: &e%arg-1's ip%" to player
+            else:
+                message "{@t} &a%arg-1%&7은(는) 현재 오프라인입니다." to the player
+        else:
+            message "{@t} 사용법: /seen <플레이어>" to the player
+
+command /chat:
+    permission: op
+    trigger:
+        if {chattings} is true:
+            set {chattings} to false
+            broadcast "{@t} 서버 채팅이 비활성화되었습니다."
+            play sound "BLOCK_BEACON_DEACTIVATE" to all players
+        else if {chattings} is false:
+            set {chattings} to true
+            broadcast "{@t} 서버 채팅이 활성화되었습니다."
+            play sound "BLOCK_BEACON_ACTIVATE" to all players
+
+command /pvp:
+    permission: op
+    trigger:
+        if {pvp} is true:
+            set {pvp} to false
+            broadcast "{@t} PVP가 비활성화되었습니다."
+            play sound "BLOCK_BEACON_DEACTIVATE" to all players
+        else if {pvp} is false:
+            set {pvp} to true   
+            broadcast "{@t} PVP가 활성화되었습니다."
+            play sound "BLOCK_BEACON_ACTIVATE" to all players
+
+command /mute [<OfflinePlayer>]:
+    permission: op
+    trigger:
+        if arg-1 is set:
+            if arg-1 is online:
+                if {mutes.%arg-1%} is true:
+                    set {mutes.%arg-1%} to false
+                    broadcast "{@t} &c%arg-1%&7님의 벙어리 상태가 해제되었습니다."
+                else if {mutes.%arg-1%} is not true:
+                    set {mutes.%arg-1%} to true
+                    broadcast "{@t} &c%arg-1%&7님이 벙어리가 되었습니다."
+                    play sound "BLOCK_ANVIL_PLACE" to all players
+            else:
+                message "{@t} &a%arg-1%&7은(는) 현재 오프라인입니다." to the player
+        else:
+            message "{@t} 사용법: /mute <플레이어>" to the player
+
+command /gm [<text>] [<OfflinePlayer>]:
+    permission: op
+    trigger:
+        if arg-2 is set:
+            if arg-2 is online:
+                if arg-1 is "s" or "0":
+                    if gamemode of arg-2 is not survival:
+                        set gamemode of arg-2 to survival
+                        message "{@t} &a%arg-2%&7의 게임 모드를 서바이벌로 변경하였습니다." to the player
+                    else if gamemode of arg-2 is survival:
+                        message "{@t} &a%arg-2%&7의 게임 모드는 이미 서바이벌입니다." to the player
+                else if arg-1 is "c" or "1":
+                    if gamemode of arg-2 is not creative:
+                        set gamemode of arg-2 to creative
+                        message "{@t} &a%arg-2%&7의 게임 모드를 크리에이티브로 변경하였습니다." to the player
+                    else if gamemode of arg-2 is creative:
+                        message "{@t} &a%arg-2%&7의 게임 모드는 이미 크리에이티브입니다." to the player
+                else if arg-1 is "a" or "2":
+                    if gamemode of arg-2 is not adventure:
+                        set gamemode of arg-2 to adventure
+                        message "{@t} &a%arg-2%&7의 게임 모드를 어드벤쳐로 변경하였습니다." to the player
+                    else if gamemode of arg-2 is adventure:
+                        message "{@t} &a%arg-2%&7의 게임 모드는 이미 어드벤쳐입니다." to the player
+                else if arg-1 is "sp" or "3":
+                    if gamemode of arg-2 is not spectator:
+                        set gamemode of arg-2 to spectator
+                        message "{@t} &a%arg-2%&7의 게임 모드를 관전자로 변경하였습니다." to the player
+                    else if gamemode of arg-2 is spectator:
+                        message "{@t} &a%arg-2%&7의 게임 모드는 이미 관전자입니다." to the player
+                else:
+                    message "{@t} 사용법: /gm <게임모드> <플레이어>" to the player
+            else:
+                message "{@t} &a%arg-2%&7은(는) 현재 오프라인입니다." to the player
+        else:
+            message "{@t} 사용법: /gm <게임모드> <플레이어>" to the player
+
+on tab complete of "/gm":
+    set tab completions for position 1 to "s", "c", "a" and "sp"
+

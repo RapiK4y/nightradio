@@ -1,0 +1,50 @@
+command /eye:
+    permission: op
+    trigger:
+        set {player::*} to all players
+        set {eyecount} to 0
+        set {eyegame} to true
+        set {playercount} to size of {player::*}
+        if {eyegame} > 3:
+            send "사람이 없슨"
+            stop
+        broadcast "============= &b&l눈치게임&r ============="
+
+command /eyestop:
+    permission: op
+    trigger:
+        eyeStop()
+
+function eyeStop():
+        set {eyecount} to 0
+        set {eyegame} to false
+        clear {player::*}
+        broadcast "============= &c&l눈치게임&r ============="
+
+on chat:
+    if {eyegame} = true:
+        if {player::*} contains player:
+            if message parsed as integer is set:
+                cancel event
+                add 1 to {eyecount}
+                if message = "%{eyecount}%":
+                    cancel event
+                    subtract player from {player::*}
+                    broadcast "%player% &b%message%"
+                    play sound "ENTITY_EXPERIENCE_ORB_PICKUP" with volume 20 at all players
+                    if {eyecount} = {playercount} - 1:
+                        broadcast "ㅅㅅ 성공 | 탈락자: %{player::*}%"
+                        execute console command "/kick %{player::*}% 눈치게임 실패 ㅂㅂ"
+                        eyeStop()
+
+                else:
+                    set {eyegame} to false
+                    cancel event
+                    broadcast "%player% &c%message%"
+                    kick the player due to "눈치게임 실패 ㅂㅂ"
+                    eyeStop()
+            else:
+                cancel event
+
+        else:
+            cancel event

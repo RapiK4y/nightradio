@@ -1,0 +1,375 @@
+options: #카드 갯수
+	Fruit1: 1,1,1,1,1 #default: 1,1,1,1,1
+	Fruit2: 2,2,2,2   #default: 2,2,2,2
+	Fruit3: 3,3,3     #default: 3,3,3
+	Fruit4: 4,4       #default: 4,4
+	Fruit5: 5     	  #default: 5
+
+on unload:
+	clear {allcard::*}
+	clear {fruit::*}
+	clear {deckCT}
+	clear {GamePlayer::*}
+
+#카드뽑기
+on right click holding paper:
+	if {timec} = 0:
+		set {timec} to 1
+		if player is {gp::%{list}%}:
+			if {fruit::%player%::*} is set:
+				play sound "item.book.page_turn" with volume 1 at player
+				set {Rb} to random element out of {fruit::%player%::*}
+				remove {Rb} from {fruit::%player%::*}
+				set {hand::%player%::*} to {fruit::%player%::*}
+				add 1 to {list}
+				set {_char} to last character of "%{Rb}%"			
+				add {_char} parsed as integer to {_value}
+				add "%{Rb}%" to {table::*}
+				if amount of {table::*} > amount of {gp::*}:
+					set {_cha} to last character of "%{table::1}%"		
+					add {_cha} parsed as integer to {_sub}
+					add {table::1} to {trash::*}
+					if "%{table::1}%" contains "자두":
+						subtract {_sub} from {자두}
+					if "%{table::1}%" contains "바나나":
+						subtract {_sub} from {바나나}
+					if "%{table::1}%" contains "딸기":
+						subtract {_sub} from {딸기}
+					if "%{table::1}%" contains "라임":
+						subtract {_sub} from {라임}
+					delete {table::1}
+					set {table::*} to {table::*}
+				if amount of {tableshow::*} >= amount of {gp::*}:
+					delete {tableshow::1}
+					set {tableshow::*} to {tableshow::*}
+				if "%last element of {table::*}%" contains "바나나":
+					if "%last element of {table::*}%" contains "바나나 1":
+						set {_tableshow} to "楠"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "바나나 2":
+						set {_tableshow} to "ꈂ"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "바나나 3":
+						set {_tableshow} to "逑"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "바나나 4":
+						set {_tableshow} to "吉"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "바나나 5":
+						set {_tableshow} to "植"
+						add {_tableshow} to {tableshow::*}
+				if "%last element of {table::*}%" contains "딸기":
+					if "%last element of {table::*}%" contains "딸기 1":
+						set {_tableshow} to "榕"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "딸기 2":
+						set {_tableshow} to "頁"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "딸기 3":
+						set {_tableshow} to "섎"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "딸기 4":
+						set {_tableshow} to "浤"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "딸기 5":
+						set {_tableshow} to "女"
+						add {_tableshow} to {tableshow::*}
+				if "%last element of {table::*}%" contains "라임":
+					if "%last element of {table::*}%" contains "라임 1":
+						set {_tableshow} to "簡"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "라임 2":
+						set {_tableshow} to "日"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "라임 3":
+						set {_tableshow} to "尸"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "라임 4":
+						set {_tableshow} to "木"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "라임 5":
+						set {_tableshow} to "土"
+						add {_tableshow} to {tableshow::*}
+				if "%last element of {table::*}%" contains "자두":
+					if "%last element of {table::*}%" contains "자두 1":
+						set {_tableshow} to "竹"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "자두 2":
+						set {_tableshow} to "十"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "자두 3":
+						set {_tableshow} to "大"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "자두 4":
+						set {_tableshow} to "弓"
+						add {_tableshow} to {tableshow::*}
+					if "%last element of {table::*}%" contains "자두 5":
+						set {_tableshow} to "難"
+						add {_tableshow} to {tableshow::*}
+				if "%{Rb}%" contains "자두":
+					add {_value} to {자두}
+				if "%{Rb}%" contains "바나나":
+					add {_value} to {바나나}
+				if "%{Rb}%" contains "딸기":
+					add {_value} to {딸기}
+				if "%{Rb}%" contains "라임":
+					add {_value} to {라임}				
+				if {list} > amount of {gp::*}:
+					set {list} to 1
+				if amount of {hand::%player%::*} > 0:
+					broadcast ""
+					broadcast "&6&l%player%이(가) 낸 카드 : &f%last element of {tableshow::*}%"
+					broadcast ""
+					broadcast "&6&l%player%&f의 남은 카드 수 : &e&l%last element out of all indexes of {hand::%player%::*}%&f장"
+					wait 15 ticks
+					broadcast "==================================================="
+					broadcast "&6&l%{gp::%{list}%}%&7의 차례입니다"
+				if amount of {hand::%player%::*} is 0:
+					broadcast ""
+					broadcast "&6&l%player%이(가) 낸 카드 : &f%last element of {tableshow::*}%"
+					broadcast ""
+					broadcast "&6&l%player%&f의 남은 카드 수 : &e&l없음"
+					broadcast "==================================================="
+					remove "%player%" from {gp::*}
+					subtract 1 from {list}
+					set {gp::*} to {gp::*}
+					broadcast "&4&l%player%가 탈락했습니다! &6&l%{gp::%{list}%}%&7의 차례입니다"
+					if {list} > "%amount of {gp::*}%":
+						set {list} to 1
+			else:
+				send "&c&l%player%님은 가지고 있는 카드가 없습니다!"
+		else:
+			if amount of {fruit::%player%::*} is not 0:
+				send "당신의 차례가 아닙니다!"
+			if amount of {fruit::%player%::*} is 0:
+				send "당신은 탈락했습니다!"
+			cancel event
+		wait 10 ticks
+		set {timec} to 0
+	else if amount of {fruit::%player%::*} is 0:
+		send "당신은 탈락했습니다!"
+		cancel event
+	else:
+		cancel event
+	
+on right click on button:
+	if {time} = 0:
+		if amount of {fruit::%player%::*} >= 1:
+			broadcast "==================================================="
+			broadcast "&3&l%player%&f가 종을 눌렀습니다!"
+			play sound "block.bell.use" with volume 1 at player
+			if {라임} = 5:										
+				broadcast "&a&l라임이 5입니다. &3&l%player%&f가 쌓인 카드를 가져갑니다."
+				add {trash::*} to {fruit::%player%::*}
+				add {table::*} to {fruit::%player%::*}
+				delete {table::*}
+				delete {trash::*}
+				delete {tableshow::*}
+				set {자두} to 0
+				set {라임} to 0
+				set {바나나} to 0
+				set {딸기} to 0
+				stop
+			if {딸기} = 5:
+				broadcast "&c&l딸기가 5입니다. &3&l%player%&f가 쌓인 카드를 가져갑니다."
+				add {trash::*} to {fruit::%player%::*}
+				add {table::*} to {fruit::%player%::*}
+				delete {table::*}
+				delete {trash::*}
+				delete {tableshow::*}
+				set {자두} to 0
+				set {라임} to 0
+				set {바나나} to 0
+				set {딸기} to 0
+				stop
+			if {바나나} = 5:
+				broadcast "&e&l바나나가 5입니다. &3&l%player%&f가 쌓인 카드를 가져갑니다."
+				add {trash::*} to {fruit::%player%::*}
+				add {table::*} to {fruit::%player%::*}
+				delete {table::*}
+				delete {trash::*}
+				delete {tableshow::*}
+				set {자두} to 0
+				set {라임} to 0
+				set {바나나} to 0
+				set {딸기} to 0
+				stop
+			if {자두} = 5:
+				broadcast "&d&l자두가 5입니다. &3&l%player%&f가 쌓인 카드를 가져갑니다."
+				add {trash::*} to {fruit::%player%::*}
+				add {table::*} to {fruit::%player%::*}
+				delete {table::*}
+				delete {trash::*}
+				delete {tableshow::*}
+				set {자두} to 0
+				set {라임} to 0
+				set {바나나} to 0
+				set {딸기} to 0
+				stop
+			else:
+				broadcast "&3&l%player% &f합산이 5가 아닙니다. 카드를 2장 뺏깁니다."
+				loop 2 times:
+					set {R} to random element out of {fruit::%player%::*}
+					remove {R} from {fruit::%player%::*}
+					add {R} to {trash::*}
+				if amount of {fruit::%player%::*} = 0:
+					remove "%player%" from {gp::*}
+					subtract 1 from {list}
+					set {gp::*} to {gp::*}
+					broadcast "&4&l%player%가 탈락했습니다! &6&l%{gp::%{list}%}%&7의 차례입니다"
+					if {list} > "%amount of {gp::*}%":
+						set {list} to 1
+		else if amount of {trash::*} = 0:
+			send "쌓인 카드가 없습니다"
+			if amount of {fruit::%player%::*} = 0:
+				remove "%player%" from {gp::*}
+				subtract 1 from {list}
+				set {gp::*} to {gp::*}
+				if {list} > "%amount of {gp::*}%":
+					set {list} to 1
+		else:
+			send "당신은 탈락했습니다"
+		set {time} to 1
+		wait 1 seconds
+		set {time} to 0
+	else:
+		stop
+
+command /br:
+	trigger:
+		broadcast "자두 %{자두}% 바나나 %{바나나}% 딸기 %{딸기}% 라임 %{라임}%"	
+		broadcast "%last element of {tableshow::*}%"
+		
+command /reset:
+	trigger:
+		delete {table::*}
+		set {list::*} to {list::*}
+		delete {trash::*}
+		set {자두} to 0
+		set {딸기} to 0
+		set {바나나} to 0
+		set {라임} to 0
+		set {time} to 0
+		set {timec} to 0
+
+every 1 tick:
+	loop all players:
+		send action bar "&6&l테이블 &f%{tableshow::*}% &a&l쌓인 카드 &f&l%amount of {trash::*}%장" to loop-player 
+		
+command /win:
+	trigger:
+		if amount of {gp::*} is 1:
+			broadcast "&a&l%{gp::1}%가 게임에서 이겼습니다!"
+			play sound "item.goat_horn.sound.0" with volume 2 at player
+			
+command /할리갈리시작:
+	trigger:
+		clear {allcard::*}
+		clear {fruit::*}
+		clear {deckCT}
+		clear {GamePlayer::*}
+		delete {table::*}
+		set {list::*} to {list::*}
+		delete {trash::*}
+		delete {tableshow::*}
+		set {자두} to 0
+		set {딸기} to 0
+		set {바나나} to 0
+		set {라임} to 0
+		set {time} to 0
+		set {timec} to 0
+		wait 15 ticks
+		set {Banana::*} to split "{@Fruit1},{@Fruit2},{@Fruit3},{@Fruit4},{@Fruit5}" at ","
+		set {Berry::*} to split "{@Fruit1},{@Fruit2},{@Fruit3},{@Fruit4},{@Fruit5}" at ","
+		set {Lime::*} to split "{@Fruit1},{@Fruit2},{@Fruit3},{@Fruit4},{@Fruit5}" at ","
+		set {Plum::*} to split "{@Fruit1},{@Fruit2},{@Fruit3},{@Fruit4},{@Fruit5}" at ","
+		loop {Banana::*}:
+			add "&e바나나 %loop-value%" to {allcard::*}
+		loop {Berry::*}:
+			add "&c딸기 %loop-value%" to {allcard::*}
+		loop {Lime::*}:
+			add "&a라임 %loop-value%" to {allcard::*}
+		loop {Plum::*}:
+			add "&5자두 %loop-value%" to {allcard::*}
+		loop {allcard::*}:
+			set {deckCT} to last element out of all indexes of {allcard::*} parsed as integer
+		loop all players:
+			add loop-player to {GamePlayer::*}	
+		broadcast "&e카드를 등록했습니다!"
+		broadcast "&e카드의 종합 장수 : %{deckCT}%장"
+		broadcast "&e게임 플레이어의 수 : %amount of {GamePlayer::*}%명"
+		wait 30 ticks
+		set {givecard} to {deckCT} / amount of {GamePlayer::*}
+		broadcast "&e플레이어에게 카드를 배분중입니다.."
+		loop {givecard} time:
+			loop all players:
+				set {Rb} to random element out of {allcard::*}
+				add {Rb} to {fruit::%loop-player%::*}
+				remove {Rb} from {allcard::*}
+				remove 1 from {deckCT}
+				#broadcast "%loop-player%의 카드 : %{fruit::%loop-player%::*}%"
+				#broadcast "남은 카드 : %{deckCT}%장"
+			if {deckCT} is 0:
+				broadcast "&6카드를 전부 배분했습니다!"
+		if {deckCT} is not 0:
+			broadcast "&c카드를 전부 배분하지 못했습니다. 게임의 진행이 막힐수있습니다."
+		wait 30 ticks
+		set {list} to 0
+		broadcast "플레이어가 정해집니다"
+		set {_p::*} to all players
+		delete {p::*}
+		delete {gp::*}
+		loop amount of {GamePlayer::*} time:
+			set {_r} to random element out of {_p::*}
+			add {_r} to {p::*}
+			remove {_r} from {_p::*}
+			broadcast "%{_r}%"
+		wait 1 seconds
+		broadcast "카드를 내는 순서를 정합니다"
+		loop amount of {p::*} time:
+			set {_r} to random element out of {p::*}
+			remove {_r} from {p::*}
+			add 1 to {list}
+			broadcast "%{list}%번째 %{_r}%"
+			add {_r} to {gp::*}
+		set {list} to 1
+		if amount of all players is 1:
+			broadcast "인원이 맞지 않습니다"
+			give all players paper named "&l카드"
+		if amount of all players is 2:
+			broadcast "2명 30장씩 카드를 나눠서 시작합니다"
+			give all players paper named "&l카드"
+		if amount of all players is 3:
+			broadcast "3명 20장씩 카드를 나눠서 시작합니다"
+			give all players paper named "&l카드"
+		if amount of all players is 4:
+			broadcast "4명 15장씩 카드를 나눠서 시작합니다"
+			give all players paper named "&l카드"
+		if amount of all players is 5:
+			broadcast "5명 12장씩 카드를 나눠서 시작합니다"
+			give all players paper named "&l카드"
+		if amount of all players is 6:
+			broadcast "6명 10장씩 카드를 나눠서 시작합니다"
+			give all players paper						
+		broadcast "게임을 시작합니다"
+
+#楠 바나나1
+#ꈂ	바나나2
+#逑	바나나3
+#吉	바나나4
+#植	바나나5
+#榕	딸기1
+#頁	딸기2
+#섎	딸기3
+#浤	딸기4
+#女 딸기5
+#簡 라임1
+#日 라임2
+#尸 라임3
+#木 라임4
+#土 라임5
+#竹 자두1
+#十 자두2
+#大 자두3
+#弓 자두4
+#難 자두5
