@@ -1,0 +1,42 @@
+on join:
+  set {chat.%player%} to "%player%"
+ 
+command /메타몽:
+  permission: op
+  trigger:
+    if {ditto} = 1:
+      play sound "ui.toast.challenge_complete" with pitch 1.4 to all players
+      broadcast " "
+      broadcast " "
+      broadcast "&a&l메타몽게임 해제"
+      broadcast " "
+      broadcast " "
+      set {ditto} to 0
+    else:
+      play sound "ui.toast.challenge_complete" with pitch 1.4 to all players
+      broadcast " "
+      broadcast " "
+      broadcast "&b&l메타몽게임 시작"
+      broadcast " "
+      broadcast " "
+      set {ditto} to 1
+ 
+on chat:
+  if {ditto} = 1:
+    set the chat format to "<%{chat.%player%}%> &f%message%"
+ 
+on damage:
+  if {ditto} = 1:
+    if victim is player:
+      if attacker is player:
+        set {chat.%attacker%} to "%victim%"
+ 
+command /me:
+  permission: op
+  trigger:
+    message "NO!"
+ 
+command /minecraft:me:
+  permission: op
+  trigger:
+    message "NO!"

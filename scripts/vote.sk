@@ -1,0 +1,61 @@
+command /redvote:
+	permission: op
+	trigger:
+		add 1 to {redvote}
+		add 1 to {vnum}
+command /orangevote:
+	permission: op
+	trigger:
+		add 1 to {orangevote}
+		add 1 to {vnum}
+command /yellowvote:
+	permission: op
+	trigger:
+		add 1 to {yellowvote}
+		add 1 to {vnum}
+command /limevote:
+	permission: op
+	trigger:
+		add 1 to {limevote}
+		add 1 to {vnum}
+command /greenvote:
+	permission: op
+	trigger:
+		add 1 to {greenvote}
+		add 1 to {vnum}
+command /cyanvote:
+	permission: op
+	trigger:
+		add 1 to {cyanvote}
+		add 1 to {vnum}
+command /skyvote:
+	permission: op
+	trigger:
+		add 1 to {skyvote}
+		add 1 to {vnum}
+command /bluevote:
+	permission: op
+	trigger:
+		add 1 to {bluevote}
+		add 1 to {vnum}
+command /purplevote:
+	permission: op
+	trigger:
+		add 1 to {purplevote}
+		add 1 to {vnum}
+command /pinkvote:
+	permission: op
+	trigger:
+		add 1 to {pinkvote}
+		add 1 to {vnum}
+command /brownvote:
+	permission: op
+	trigger:
+		add 1 to {brownvote}
+		add 1 to {vnum}
+command /greyvote:
+	permission: op
+	trigger:
+		add 1 to {greyvote}
+		add 1 to {vnum}
+

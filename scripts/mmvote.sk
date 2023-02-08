@@ -1,0 +1,36 @@
+on load:
+    broadcast "&3 투표 스크립트 리로드. /투표를 사용할 수 있어요"
+    set {team1} to 0
+    set {team2} to 0
+    delete {voted::*}
+
+command /투표 <integer>:
+    trigger:
+        if {voted::%player%} is true:
+            send " 이미 투표했어요!"
+            stop
+        
+        if arg-1 is 1:
+            add 1 to {team1}
+            set {voted::%player%} to true
+            send "&3 1번에 투표했어요"
+        else if arg-1 is 2:
+            add 1 to {team2}
+            set {voted::%player%} to true
+            send "&3 1번에 투표했어요"
+
+        else:
+            send " 반드시 1 또는 2중 한 개를 입력해주세요"
+            stop
+        
+command /투표결과:
+    permission: op
+    trigger:
+        broadcast "투표결과 : <##0080FF>&l1&f:%{team1}% <##DF0101>&l2:&f%{team2}%"
+        wait 2 seconds
+        if {team1} > {team2}:
+            broadcast "&l 당선 : <##0080FF>&l1"
+        else if {team1} < {team2}:
+            broadcast "&l 당선 : <##DF0101>&l2"
+        else:
+            broadcast "동점입니다."

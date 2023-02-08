@@ -1,0 +1,22 @@
+on load:
+    delete {target}
+
+on chat:
+    if {target} is set: 
+        if event-player is {target}:
+            send title "&e%{target}%" with subtitle message to all players for 6 seconds with fade in 1 ticks and fade out 10 ticks
+
+command /select [<player>]:
+    trigger:
+        if player is op:
+            if arg 1 is set:
+                if {target} is set:
+                    delete {target}
+                    message "&ctarget delete" to player
+                else:
+                    set {target} to arg 1
+                    message "&atarget select" to player
+                    broadcast " "
+                    broadcast "&e얘들아!!! &n%arg 1%(이)가 할 말 있대!!!"
+                    broadcast " "
+                    play sound "item.goat_horn.sound.1" with pitch 1.4 to all players

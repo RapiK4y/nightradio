@@ -1,0 +1,362 @@
+options:
+	s: <##7CFEFE>&l[SYSTEM]&r
+
+command /startbabo [<text>] [<text>]:
+	permission: op
+	trigger:
+		set {color::*} to "<##C21515>","<##FF6F00>","<##FFBD21>","<##6CCF12>","<##668428>","<##3498AA>","<##32AEF9>","<##2828A5>","<##7824BB>","<##F888B1>","<##81471D>","<##91918B>"
+		if arg 1 is not set:
+			message "{@s} &c&l시민 제시어를 입력하여 주십시오!" to player
+			stop
+		else if arg 2 is not set:
+			message "{@s} &c&l라이어 제시어를 입력하여 주십시오!" to player
+			stop
+		else:
+			set {제시어} to arg 1
+			set {라이어의제시어} to arg 2
+		set gamemode of player to spectator
+		execute console command "clear @a"
+		set {gamemode} to "babo"
+		make console execute command "/setblock -78 43 113 minecraft:air"
+		make console execute command "/setblock -80 43 107 minecraft:air"
+		make console execute command "/setblock -84 43 103 minecraft:air"
+		make console execute command "/setblock -90 43 101 minecraft:air"
+		make console execute command "/setblock -96 43 103 minecraft:air"
+		make console execute command "/setblock -100 43 107 minecraft:air"
+		make console execute command "/setblock -102 43 113 minecraft:air"
+		make console execute command "/setblock -100 43 119 minecraft:air"
+		make console execute command "/setblock -96 43 123 minecraft:air"
+		make console execute command "/setblock -90 43 125 minecraft:air"
+		make console execute command "/setblock -84 43 123 minecraft:air"
+		make console execute command "/setblock -80 43 119 minecraft:air"
+		delete {explains::*}
+		delete {vnum}
+		delete {redvote}
+		delete {orangevote}
+		delete {yellowvote}
+		delete {limevote}
+		delete {greenvote}
+		delete {cyanvote}
+		delete {skyvote}
+		delete {bluevote}
+		delete {purplevote}
+		delete {pinkvote}
+		delete {brownvote}
+		delete {greyvote}
+		delete {vp}
+		set {explain} to false
+		delete {liar}
+		delete {player::*}
+		delete {ingameplayer::*}
+		delete {voteplayer::1}
+		set {ingame} to true
+		loop all players:
+			if loop-player's gamemode is spectator:
+				set {host} to loop-player
+			else:
+				add loop-player to {player::*}
+		set {liar} to random element out of {player::*}
+		broadcast " "
+		broadcast "{@s} &l게임을 시작합니다."
+		broadcast "{@s} &l선택된 모드: &a&l바보모드"
+		broadcast " "
+		play sound "block.note_block.bell" with volume 1 and pitch 1.06 to all players
+		send title "&e&l3" with subtitle " " to all players for 1 seconds
+		wait 1 second
+		play sound "block.note_block.bell" with volume 1 and pitch 1.06 to all players
+		send title "&6&l2" to all players for 1 seconds
+		wait 1 second
+		play sound "block.note_block.bell" with volume 1 and pitch 1.06 to all players
+		send title "&c&l1" to all players for 1 seconds
+		wait 1 second
+		play sound "block.note_block.bell" with volume 1 and pitch 1.42 to all players
+		send title "&a&lSTART" to all players for 1 seconds
+		set {randomplayer} to random element out of {player::*}
+		set {red} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-41.5, 43, 112.5, world "world", 90, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {orange} to {randomplayer}
+		add {randomplayer} to {ingameplayer::*}
+		remove {randomplayer} from {player::*}
+		teleport {randomplayer} to location(-43.5, 43, 107.5, world "world", 45, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {yellow} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-47.5, 43, 103.5, world "world", 45, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {lime} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-52.5, 43, 101.5, world "world", 0, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {green} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-57.5, 43, 103.5, world "world", -45, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {cyan} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-61.5, 43, 107, world "world", -45, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {sky} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-63.5, 43, 112.5, world "world", -90, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {blue} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-61.5, 43, 117.5, world "world", -135, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {purple} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-57.5, 43, 121.5, world "world", -135, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {pink} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-52.5, 43, 123.5, world "world", 180, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {brown} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-47.5, 43, 121.5, world "world", 135, 0)
+		set {randomplayer} to random element out of {player::*}
+		set {grey} to {randomplayer}
+		remove {randomplayer} from {player::*}
+		add {randomplayer} to {ingameplayer::*}
+		teleport {randomplayer} to location(-43.5, 43, 117.5, world "world", 135, 0)
+		loop {ingameplayer::*}:
+			if loop-value = {liar}:
+				set {liarnum} to loop-index
+		make console execute command "/setblock -78 43 113 minecraft:player_head[rotation=12]{SkullOwner:{Name:%{ingameplayer::1}%}}"
+		make console execute command "/setblock -80 43 107 minecraft:player_head[rotation=10]{SkullOwner:{Name:%{ingameplayer::2}%}}"
+		make console execute command "/setblock -84 43 103 minecraft:player_head[rotation=10]{SkullOwner:{Name:%{ingameplayer::3}%}}"
+		make console execute command "/setblock -90 43 101 minecraft:player_head[rotation=8]{SkullOwner:{Name:%{ingameplayer::4}%}}"
+		make console execute command "/setblock -96 43 103 minecraft:player_head[rotation=6]{SkullOwner:{Name:%{ingameplayer::5}%}}"
+		make console execute command "/setblock -100 43 107 minecraft:player_head[rotation=6]{SkullOwner:{Name:%{ingameplayer::6}%}}"
+		make console execute command "/setblock -102 43 113 minecraft:player_head[rotation=4]{SkullOwner:{Name:%{ingameplayer::7}%}}"
+		make console execute command "/setblock -100 43 119 minecraft:player_head[rotation=2]{SkullOwner:{Name:%{ingameplayer::8}%}}"
+		make console execute command "/setblock -96 43 123 minecraft:player_head[rotation=2]{SkullOwner:{Name:%{ingameplayer::9}%}}"
+		make console execute command "/setblock -90 43 125 minecraft:player_head[rotation=0]{SkullOwner:{Name:%{ingameplayer::10}%}}"
+		make console execute command "/setblock -84 43 123 minecraft:player_head[rotation=14]{SkullOwner:{Name:%{ingameplayer::11}%}}"
+		make console execute command "/setblock -80 43 119 minecraft:player_head[rotation=14]{SkullOwner:{Name:%{ingameplayer::12}%}}"
+		wait 1 seconds
+		message "{@s} &l제시어는 &a&l%{라이어의제시어}%&r&l입니다." to {liar}
+		loop all players:
+			loop-player is not {liar}
+			message "{@s} &l제시어는 &a&l%{제시어}%&r&l입니다." to loop-player
+		wait 1.5 seconds
+		broadcast " "
+		broadcast "{@s} &l이제 본격적인 게임을 시작하겠습니다."
+		broadcast " "
+		wait 0.5 seconds
+		set {explain} to true	
+		set {time} to 30
+		set {num} to 1
+		set {chatban} to true
+		while {explain} is true:
+			send action bar colored "%{color::%{num}%}%%{ingameplayer::%{num}%}%&r&l님이 설명하실 차례입니다. &a&l[%{time}%초]" to all players
+			if {time} is not 0:
+				wait 1 seconds
+				remove 1 from {time}
+			else if {time} is 0:
+				add " " to {explains::*}
+				set {time} to 30
+				set {next} to true
+				broadcast colored "&7&l[%{color::%{num}%}%%{ingameplayer::%{num}%}%&7&l]"
+			if {next} is true:
+				set {next} to false
+				if size of {ingameplayer::*} = {num}:
+					set {chatban} to false
+					set {explain} to false
+					send action bar " " to all players
+					broadcast " "
+					broadcast "{@s} &l모두의 설명이 끝났습니다. 토의를 시작해 주십시오."
+					broadcast "{@s} &a&l/설명&r&l 또는 &a&l/설명 [닉네임]&r&l으로 설명을 다시 볼 수 있습니다."
+					broadcast " "
+					loop all players:
+						give {timeup} to loop-player
+						give {timedown} to loop-player
+					set {discussion} to true
+					set {discussiontime} to (size of {ingameplayer::*} * 10 + 30)
+					while {discussion} is true:
+						send action bar "&l투표 시작까지 &a&l[%{discussiontime}%초]" to all players
+						if {discussiontime} > 0:
+							wait 1 seconds
+							remove 1 from {discussiontime}
+						else if {discussiontime} <= 0 :
+							set {discussion} to false
+							execute console command "clear @a"
+							broadcast " "
+							broadcast "{@s} &l토의가 끝났습니다. 투표를 진행해 주십시오."
+							broadcast " "
+							teleport all players to location(-89.5, 42, 113.5, world "world")
+							set {voting} to true
+							set {votingtime} to 20
+							while {voting} is true:
+								send action bar "&l투표 마감까지 &a&l[%{votingtime}%초]" to all players
+								if {vnum} = size of {ingameplayer::*}:
+									set {votingtime} to 0
+								if {votingtime} is not 0:
+									wait 1 seconds
+									remove 1 from {votingtime}
+								else if {votingtime} = 0:
+									delete {vnum}
+									send action bar " " to all players
+									delete {voteplayer::*}
+									set {voting} to false
+									broadcast " "
+									broadcast "{@s} &l투표 결과..."
+									broadcast " "
+									teleport all players to location(-34.5, 42, 119.5, world "world", -90, 0)
+									set {voteresult} to max({redvote}, {orangevote}, {yellowvote}, {limevote}, {greenvote}, {cyanvote}, {skyvote}, {bluevote}, {purplevote}, {pinkvote}, {brownvote}, {greyvote})
+									if {redvote} = {voteresult}:
+										add {red} to {voteplayer::*}
+										set {resultcolor} to {color::1}
+									if {orangevote} = {voteresult}:
+										add {orange} to {voteplayer::*}
+										set {resultcolor} to {color::2}
+									if {yellowvote} = {voteresult}:
+										add {yellow} to {voteplayer::*}
+										set {resultcolor} to {color::3}
+									if {limevote} = {voteresult}:
+										add {lime} to {voteplayer::*}
+										set {resultcolor} to {color::4}
+									if {greenvote} = {voteresult}:
+										add {green} to {voteplayer::*}
+										set {resultcolor} to {color::5}
+									if {cyanvote} = {voteresult}:
+										add {cyan} to {voteplayer::*}
+										set {resultcolor} to {color::6}
+									if {skyvote} = {voteresult}:
+										add {sky} to {voteplayer::*}
+										set {resultcolor} to {color::7}
+									if {bluevote} = {voteresult}:
+										add {blue} to {voteplayer::*}
+										set {resultcolor} to {color::8}
+									if {purplevote} = {voteresult}:
+										add {purple} to {voteplayer::*}
+										set {resultcolor} to {color::9}
+									if {pinkvote} = {voteresult}:
+										add {pink} to {voteplayer::*}
+										set {resultcolor} to {color::10}
+									if {brownvote} = {voteresult}:
+										add {brown} to {voteplayer::*}
+										set {resultcolor} to {color::11}
+									if {greyvote} = {voteresult}:
+										add {grey} to {voteplayer::*}
+										set {resultcolor} to {color::12}
+									if size of {voteplayer::*} is not 1:
+										wait 1.5 seconds
+										broadcast " "
+										broadcast "{@s} &l투표 선출자가 2명 이상입니다. 재투표를 진행합니다."
+										broadcast " "
+										delete {voteplayer::*}
+										delete {voteresult}
+										set {votingtime} to 20
+										set {voting} to true
+										teleport all players to location(-89.5, 42, 113.5, world "world")
+										delete {redvote}
+										delete {orangevote}
+										delete {yellowvote}
+										delete {limevote}
+										delete {greenvote}
+										delete {cyanvote}
+										delete {skyvote}
+										delete {bluevote}
+										delete {purplevote}
+										delete {pinkvote}
+										delete {brownvote}
+										delete {greyvote}
+									else if size of {voteplayer::*} is 1:
+										wait 1.5 seconds
+										broadcast " "
+										broadcast colored "{@s} %{resultcolor}%%{voteplayer::1}%&r&l님이 선출되었습니다!"
+										broadcast " "
+										teleport {voteplayer::1} to location(-27.5, 43, 119.5, world "world", 90, 0)
+										wait 1.5 seconds
+										broadcast " "
+										if {voteplayer::1} = {liar}:
+											broadcast colored "{@s} %{resultcolor}%%{voteplayer::1}%&r&l님은 <##FF0A0A>&l라이어&r&l였습니다!"
+											broadcast " "
+											wait 1.5 seconds
+											broadcast " "
+											broadcast "{@s} <##FF0A0A>&l라이어&r&l가 검거 되었으므로, 마지막 찬스를 실행합니다."
+											broadcast " "
+											set {vp} to {voteplayer::1}
+											set {제시어입력} to false
+											set {chance} to true
+											set {chancetime} to 20
+											while {chance} is true:
+												send action bar "&l라이어가 제시어를 입력하는 중 &a&l[%{chancetime}%초]" to all players
+												if {제시어입력} is true:
+													delete {vp}
+													set {chance} to false
+													send action bar " " to all players
+													wait 1 seconds
+													if {라이어제시어} is not {제시어}:
+														broadcast " "
+														broadcast "{@s} &l이번 게임의 제시어는 &a&l%{제시어}%&r&l입니다. <##FF0A0A>&l라이어&r&l가 정답을 맞히지 못하였습니다!"
+														broadcast " "
+														wait 0.5 seconds
+														send title "&b&l시민 &r&l승리!" with subtitle colored "&7&l라이어:%{color::%{liarnum}%}% %{liar}%" to all players for 10 seconds
+														set {ingame} to false
+														teleport all players to location(0.5, 33, 110.5, world "world")
+														loop all players:
+															loop-player is not op
+															set gamemode of loop-player to adventure
+														broadcast "{@s} &l제시어는 &a&l%{제시어}%&r&l였습니다."
+														broadcast "{@s} &l라이어 제시어는 &a&l%{라이어의제시어}%&r&l였습니다."
+													else if {라이어제시어} = {제시어}:
+														wait 0.5 seconds
+														broadcast " "
+														broadcast "{@s} &l이번 게임의 제시어는 &a&l%{제시어}%&r&l입니다. <##FF0A0A>&l라이어&r&l가 정답을 맞혔습니다!"
+														broadcast " "
+														wait 0.5 seconds
+														send title "<##FF0A0A>&l라이어 &r&l승리!" with subtitle colored "&7&l라이어:%{color::%{liarnum}%}% %{liar}%" to all players for 10 seconds
+														set {ingame} to false
+														teleport all players to location(0.5, 33, 110.5, world "world")
+														loop all players:
+															loop-player is not op
+															set gamemode of loop-player to adventure
+														broadcast "{@s} &l제시어는 &a&l%{제시어}%&r&l였습니다."
+														broadcast "{@s} &l라이어 제시어는 &a&l%{라이어의제시어}%&r&l였습니다."
+												if {chancetime} is not 0:
+													wait 1 seconds
+													remove 1 from {chancetime}
+												else if {chancetime} is 0:
+													delete {vp}
+													set {chance} to false
+													broadcast " "
+													broadcast "{@s} <##FF0A0A>&l라이어&r가 제한시간 내에 제시어를 입력하지 못하였습니다!"
+													broadcast " "
+													wait 0.5 seconds
+													send title "&b&l시민 &r&l승리!" with subtitle colored "&7&l라이어:%{color::%{liarnum}%}% %{liar}%" to all players for 10 seconds
+													set {ingame} to false
+													teleport all players to location(0.5, 33, 110.5, world "world")
+													loop all players:
+														loop-player is not op
+														set gamemode of loop-player to adventure
+													broadcast "{@s} &l제시어는 &a&l%{제시어}%&r&l였습니다."
+													broadcast "{@s} &l라이어 제시어는 &a&l%{라이어의제시어}%&r&l였습니다."
+										else:
+											broadcast colored "{@s} %{resultcolor}%%{voteplayer::1}%&r&l님은 &b&l시민&r&l이었습니다!"
+											broadcast " "
+											wait 0.5 seconds
+											send title "<##FF0A0A>&l라이어 &r&l승리!" with subtitle colored "&7&l라이어:%{color::%{liarnum}%}% %{liar}%" to all players for 10 seconds
+											set {ingame} to false
+											teleport all players to location(0.5, 33, 110.5, world "world")
+											loop all players:
+												loop-player is not op
+												set gamemode of loop-player to adventure
+											broadcast "{@s} &l제시어는 &a&l%{제시어}%&r&l였습니다."
+											broadcast "{@s} &l라이어 제시어는 &a&l%{라이어의제시어}%&r&l였습니다."
+				else:
+					set {time} to 30
+					add 1 to {num}

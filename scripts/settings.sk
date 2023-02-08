@@ -1,0 +1,4 @@
+on rightclick on trapdoor:
+    if player is not op:
+        cancel event
+        send "&3&l [[dev]]구현되지 않은 기능 또는 금지된 기능입니다."
