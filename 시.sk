@@ -1,0 +1,195 @@
+options:
+    t: &7[&3&l!&7]
+
+on load:
+    broadcast "&9 시 스크립트 리로드"
+
+command /시 [<player>]:
+    permission: op
+    trigger:
+        if {gamestart} is  true:
+            send "{@t} 이미 게임이 시작되었습니다."
+            stop
+        else if {forcestop} is true:
+            send "{@t} 강제종료된 게임을 초기화중입니다."
+            stop
+
+        else:
+            set {gamestart} to true
+
+        clearfunction()
+        broadcast "{@t} 게임이 시작됩니다."
+        teleport all players to location(-63.5, -60, 59.5, world "world", 0, 0)
+
+        broadcast "{@t} 잠시 후 시인이 선정됩니다."
+        wait 2 seconds
+        if arg-1 is not set:
+            set {twosixfour} to random player out of all players        
+        else:
+            set {twosixfour} to arg-1
+        broadcast "{@t} %{twosixfour}%이(가) 이번 시인입니다."
+        teleport {twosixfour} to location(-64.5, -59, 69.5, world "world", 180, 0)
+        wait 2 second
+        set {fundmanager} to random player out of all players   
+        broadcast "{@t} %{fundmanager}%이(가) 이번 주제를 선정합니다."
+        teleport {fundmanager} to location(-69.5, -59, 64.5, world "world", -90, 0) if {twosixfour} is not {fundmanager}
+
+        set {choosing} to true        
+
+        send "&f&l 시간 안에 주제를 입력해주세요" to {fundmanager}
+        set {_t} to 15
+
+        while {choosing} is true:
+            send action bar "&c&l%{_t}%&f&l초 남았습니다" to all players
+            wait 1 second
+            subtract 1 from {_t}
+
+            if {forcestop} is true:
+                stop loop
+                stop
+
+            if {_t} = 0:
+                stop loop
+        
+        if {forcestop} is true:
+            stop
+
+        if {choosing} is true:
+            execute console command "강제중단"
+        else:
+            broadcast "{@t} 주제가 선정되었습니다. - &f&l %{maintext}%"
+            wait 1 second
+            broadcast "&f 시인은 시를 써주세요"
+            set {maingame} to true
+            poemtitle({twosixfour})
+
+command /강제중단:
+    permission: op
+    trigger:
+        set {forcestop} to true
+        
+        clearfunction()
+        set {gamestart} to false
+        set {maingame} to false
+
+        broadcast "{@t} 게임이 강제중단 됐습니다."
+        
+        teleport all players to location(-54.5, -59, 67.5, world "world", 180, 0)
+        wait 3 seconds
+        broadcast "{@t} 이제 다시 게임이 가능합니다."
+        set {forcestop} to false
+
+on chat:
+    if {choosing} is true:
+        if {fundmanager} is player:
+            cancel event
+            set {maintext} to message
+            set {choosing} to false
+
+    if {maingame} is true:
+        cancel event
+        if player is {twosixfour}:
+            if {Waiting_poemtitle} is true:
+                set {poemtitle} to message
+                broadcast "&f&l    『%message%』"
+                broadcast "&l                   -%player%"
+                set {Waiting_poemtitle} to false
+            else if message contains "@":
+                broadcast " "
+            else if message contains "##":
+                ending()
+            else if {poeming} is true:
+                broadcast "&f&l%message%"
+            else:
+                broadcast "<%player's name%> %message%"
+        else if player is {fundmanager}:
+            if {choosing} is true:
+                set {maintext} to message
+                set {choosing} to false
+
+command /ddos:
+    permission: op
+    trigger:
+        send title "&4DDOS" for 100 seconds
+        while true:
+            add 1 to {_n}
+
+function ending():
+    broadcast "&f&l==============================================="
+    set {gamestart} to false
+    set {maingame} to false
+    send title " " to {twosixfour}
+    clearfunction()
+    teleport all players to location(-54.5, -59, 67.5, world "world", 180, 0)
+
+function poemtitle(p: player):
+    broadcast "&f&l==============================================="
+    set {Waiting_poemtitle} to true
+    title_input({_p})
+
+function title_input(p: player):
+    set {_n} to 15
+    while {Waiting_poemtitle} is true:
+        send title "&f 제목을 입력하세요!" to {_p}
+        send action bar "&c&l%{_n}%초&f&l 남았습니다" to all players
+        wait 1 second
+        subtract 1 from {_n}
+
+        if {forcestop} is true:
+            stop loop
+
+        if {_n} = 0:
+            stop loop
+
+    send title "&f " to {_p}
+    send action bar "&f " to {_p}
+
+    if {forcestop} is true:
+        stop
+
+    if {Waiting_poemtitle} is true:
+        execute console command "강제중단"
+    else:
+        set {poeming} to true
+        poemsequence({_p})
+
+function poemsequence(p: player):
+    set {_t} to 60
+    while {poeming} is true:
+        send title "빈 줄: &c@&f| 끝내기 : &c##" to {_p}
+        send action bar "&c&l%{_t}%&f&l초 남았습니다" to all players
+        wait 1 second
+        subtract 1 from {_t}
+
+        if {forcestop} is true:
+            stop loop
+        
+        if {_t} = 0:
+            stop loop
+
+    if {forcestop} is true:
+        stop
+
+    if {poeming} is true:
+        execute console command "강제중단"
+
+function clearfunction():
+    delete {twosixfour}
+    delete {fundmanager}
+    delete {choosing}
+    delete {maintext}
+    delete {Waiting_poemtitle}
+    delete {poemtitle}
+    delete {poeming}
+
+command /me:
+    trigger:
+        send "no!"
+
+
+command /minecraft:me:
+    trigger:
+        send "盧!"
+
+on rightclick with egg:
+    give player a egg
