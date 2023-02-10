@@ -107,3 +107,19 @@ command /토론팀제거 <player>:
         else:
             delete {debate.%arg-1%.debateteam}
             broadcast "{@t} %arg-1%이(가) 모든 팀에서 제거되었습니다."
+
+command /파랑팀이동:
+    permission: op
+    trigger:
+        loop all players:
+            if {debate.%loop-player%.debateteam} is 1:
+                teleport loop-player to location
+
+command /전체토론팀제거:
+    trigger:
+        if {debate.%player%.debateteam} is not 0:
+            send "{@t} 해당 명령어는 사회자만 사용할 수 있습니다."
+        else:
+            loop all players:
+                delete {debate.%loop-player%.debateteam}
+                send "{@t} 모든 팀에서 제거되었습니다." to player

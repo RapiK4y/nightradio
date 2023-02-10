@@ -15,7 +15,7 @@ on rightclick with spawn egg:
 on join:
     execute command "effect give %player% saturation 99999 1 true"
     wait 1 second
-    broadcast formatted "<link:https://sync-tube.de/room/FMQRvwT8>§3&l[LINK]"
+    broadcast formatted "<link:https://sync-tube.de/room/U7xHwIiR>§3&l[LINK]"
 
 on respawn:
     wait 5 ticks

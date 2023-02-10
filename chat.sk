@@ -73,13 +73,13 @@ on chat:
 
 		if {debate.%player%.debateteam} is 1 or 2:
 			if {debate.%player%.debateteam} is 1:
-				set {_mes} to "&9%(player's name)%&f%{_mes}%"
+				set {_mes} to "&9%(player's name)%: &r%message%"
 			else:
-				set {_mes} to "&c%(player's name)%&f%{_mes}%"
+				set {_mes} to "&c%(player's name)%: &r%message%"
 
 		else if player is op:
-			set {_mes} to "%Chat_getPlayerHeadColor(player)%%{_mes}%"
-			
+			set {_mes} to "%Chat_getPlayerHeadColor(player)%%(player's name)%: &r%message%"
+
 		else:
 			set {_mes} to "%(player's name)%: &r%(message)%"			
 		
@@ -124,12 +124,12 @@ on chat:
 						send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
 						stop
 				else if {reddebatesilence} is true:
-					if {debate.%player%.debateteam} is 1:
+					if {debate.%player%.debateteam} is 2:
 						send "&7 레드 정숙!" to player
 						send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
 						stop
 				else if {bluedebatesilence} is true:
-					if {debate.%player%.debateteam} is 2:
+					if {debate.%player%.debateteam} is 1:
 						send "&7 블루 정숙!" to player
 						send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
 						stop
