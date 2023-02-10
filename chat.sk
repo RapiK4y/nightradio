@@ -71,17 +71,17 @@ on chat:
 			set {_mes} to "%(uncolored player's name)%: %(uncolored message)%"
 			set {_mes} to "%Chat_getPlayerHeadColor(player)%%{_mes}%"
 
-		else:
-			set {_mes} to "%(player's name)%: &r%(message)%"
-
 		if {debate.%player%.debateteam} is 1 or 2:
 			if {debate.%player%.debateteam} is 1:
 				set {_mes} to "&9%(player's name)%&f%{_mes}%"
 			else:
 				set {_mes} to "&c%(player's name)%&f%{_mes}%"
-		
+
 		else if player is op:
-			set {_mes} to "%Chat_getPlayerHeadColor(player)%%{_mes}%"			
+			set {_mes} to "%Chat_getPlayerHeadColor(player)%%{_mes}%"
+			
+		else:
+			set {_mes} to "%(player's name)%: &r%(message)%"			
 		
 		if {headchat}:
 			set {_mes} to "%Chat_getPlayerHeadIcon(player)%&r %{_mes}%"
