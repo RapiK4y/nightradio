@@ -135,10 +135,10 @@ on chat:
 						stop
 				else:	
 					if {leaddebatesilence} is true:
-					if {debate.%player%.debateteam} is 5:
-						send "&7 정숙!" to player
-						send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
-						stop
+						if {debate.%player%.debateteam} is 5:
+							send "&7 정숙!" to player
+							send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+							stop
 
 				loop all players:
 					if {gaming.%loop-player%} is {gaming.%player%}:

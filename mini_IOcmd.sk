@@ -132,12 +132,14 @@ command /토론:
             send "{@t} 토론장으로 이동합니다." to player
             teleport player to location(126.5, -15, 82.5, world "world", 180, 0)
             set {gaming.%player%} to 4
+            set {debate.%player%.debateteam} to 5
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
 
         else:
             send "{@t} 토론장에서 나옵니다." to player
             teleport player to location(126.5, -15, 86.5, world "world", 0, 0)
             set {gaming.%player%} to 0
+            delete {debate.%player%.debateteam}
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
 
 command /토론npc <OfflinePlayer>:
@@ -147,10 +149,12 @@ command /토론npc <OfflinePlayer>:
             send "{@t} 토론장으로 이동합니다." to arg-1
             teleport arg-1 to location(126.5, -15, 82.5, world "world", 180, 0)
             set {gaming.%arg-1%} to 4
+            set {debate.%arg-1%.debateteam} to 5
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to arg-1
 
         else:
             send "{@t} 토론장에서 나옵니다." to arg-1
             teleport arg-1 to location(126.5, -15, 86.5, world "world", 0, 0)
             set {gaming.%arg-1%} to 0
+            delete {debate.%arg-1%.debateteam}
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to arg-1
