@@ -23,12 +23,15 @@ on chat:
     if message contains "료":
         if message contains "료땅":
             replace all "료땅" with "<##0c368b>&l료땅&f" in message
+            send action bar "                       <f:char>" to player
             stop
 
         replace all "료" with "<##0c368b>&l료&f" in message
+        send action bar "                       <f:char>" to player
     
     if message contains "봇치":
         replace all "봇치" with "<##F6B4C0>&l봇치&f" in message
+        send action bar "                       <f:char>" to player
 
     if message contains "키타":
         if message contains "키타가와":
@@ -36,8 +39,10 @@ on chat:
 
         else:
             replace all "키타" with "<##C95256>&l키타&f" in message
+            send action bar "                       <f:char>" to player
 
     if message contains "키땅":
+        send action bar "                       <f:char>" to player
         if message contains "키땅~":
             replace all "키땅~" with "<##C95256>&l키땅~&f" in message
             stop
@@ -46,6 +51,7 @@ on chat:
 
     if message contains "니지카":
         replace all "니지카" with "<##EEDE87>&l니지카&f" in message
+        send action bar "                       <f:char>" to player
 
     if message contains "피글렛":
         replace all "피글렛" with "<##ff9cdd>&l피글렛&f" in message
@@ -82,4 +88,7 @@ on chat:
     
     if message contain "그웬":
         replace all "그웬" with "<##42C2E1>&l그웬&f" in message
+    
+    if message contains "칸나":
+        replace all "칸나" with "<##9A2EFE>&l칸나&f" in message
         

@@ -1,6 +1,9 @@
 options:
     t: &7[&3&l!&7]
 
+on load:
+    delete {alldebatesilence}
+
 on quit:
     if {debate.%player%.debateteam} is 0:
         delete {debate.%player%.debateteam}
@@ -41,17 +44,31 @@ function Debate_gray(p: player):
 command /전체정숙:
     permission: op
     trigger:
-        if {alldebatesilence} is not true:
-            set {alldebatesilence} to true
+        set {_n} to 0
+        if {bluedebatesilence} is true:
+            add 1 to {_n}
+        if {reddebatesilence} is true:
+            add 1 to {_n}
+        if {leaddebatesilence} is true:
+            add 1 to {_n}
+        
+        if {_n} is 3:
+            set {bluedebatesilence} to false
+            set {reddebatesilence} to false
+            set {leaddebatesilence} to false
+
+            loop all players:
+                if {gaming.%loop-player%} is 4:
+                    send "&3&l이제 발언이 가능합니다." to loop-player
+        else:
+            set {bluedebatesilence} to true
+            set {reddebatesilence} to true
+            set {leaddebatesilence} to true
+
             loop all players:
                 if {gaming.%loop-player%} is 4:
                     send "&3&l모두 정숙하시오!" to loop-player
-        else:
-            set {alldebatesilence} to false
-            
-            loop all players:
-                if {gaming.%loop-player%} is 4:
-                    send "&3&l 발언이 가능합니다" to loop-player
+
 command /파랑정숙:
     permission: op
     trigger:
@@ -84,6 +101,21 @@ command /빨강정숙:
                 if {gaming.%loop-player%} is 4:
                     send "&c&l레드팀 &3&l발언이 가능합니다" to loop-player
 
+command /관객정숙:
+    permission: op
+    trigger:
+        if {leaddebatesilence} is not true:
+            set {leaddebatesilence} to true
+
+            loop all players:
+                if {gaming.%loop-player%} is 4:
+                    send "&3&l관객은 &3&l정숙하시오!" to loop-player
+        else:
+            set {leaddebatesilence} to false
+
+            loop all players:
+                if {gaming.%loop-player%} is 4:
+                    send "&3&l관객석은 &3&l발언이 가능합니다" to loop-player
 command /파랑팀추가 <player>:
     trigger:
         if {debate.%player%.debateteam} is not 0:
@@ -107,6 +139,11 @@ command /토론팀제거 <player>:
         else:
             delete {debate.%arg-1%.debateteam}
             broadcast "{@t} %arg-1%이(가) 모든 팀에서 제거되었습니다."
+
+command /토론팀제거console <player>:
+    permission: op
+    trigger:
+        delete {debate.%arg-1%.debateteam}
 
 command /파랑팀이동:
     permission: op

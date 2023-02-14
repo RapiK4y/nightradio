@@ -34,57 +34,40 @@ command /chatstop:
 			broadcast "{@t} 채팅을 다시 칠 수 있어요"
 on chat:
 	if {stopmessage} is true:
-		if player is op:
-			stop
-		
-		cancel event
-		send "{@t} 현재 채팅을 칠 수 없어요!" to player
-		
-	if player = {vp}:
-		if {chance} is true:
+		if player is not op:
 			cancel event
-			broadcast "&7&l[<##FF0A0A>&l라이어&f&l가 입력한 제시어&7&l] &r%message%"
-			set {라이어제시어} to message
-			set {제시어입력} to true
-	else:
-		if {chatban} is false:
-			if {ingameplayer::*} contains player:
-				cancel event
-				loop {ingameplayer::*}:
-					if loop-value = player:
-						set {chatnum} to loop-index
-						broadcast colored "<%{color::%{chatnum}%}%%player%&r> %message%"
-
-	if {gaming.%player%} is 2:	
-		if {chatban} is true:
-			if player is not {ingameplayer::%{num}%}:
-				message "{@t} 타인이 설명 중일 때는, 채팅이 금지됩니다."
-				cancel event
-			else:
-				broadcast colored "&7&l[%{color::%{num}%}%%{ingameplayer::%{num}%}%&7&l] &r%message%"
-				add message to {explains::*}
-				set {next} to true
-
+			send "{@t} 현재 채팅을 칠 수 없어요!" to player
+		
 	if event is not cancelled:	
 		cancel event
+
+		send "[Channel:%{gaming.%player%}%] %player's name% %message%" to console
+
+		if message contains "http" or "www.":
+			set {linkcontain} to true
+			set {_link} to message
+			set {_mes} to "<link:%{_link}%>[&3LINK&r]"
+		else:
+			set {_mes} to message
+
 		if {colorchat}:
 			set {_mes} to "%(uncolored player's name)%: %(uncolored message)%"
 			set {_mes} to "%Chat_getPlayerHeadColor(player)%%{_mes}%"
 
 		if {debate.%player%.debateteam} is 1 or 2:
 			if {debate.%player%.debateteam} is 1:
-				set {_mes} to "&9%(player's name)%: &r%message%"
+				set {_mes} to "&9%(player's name)%: &r%{_mes}%"
 			else:
-				set {_mes} to "&c%(player's name)%: &r%message%"
+				set {_mes} to "&c%(player's name)%: &r%{_mes}%"
 
 		else if player is op:
-			set {_mes} to "%Chat_getPlayerHeadColor(player)%%(player's name)%: &r%message%"
+			set {_mes} to "%Chat_getPlayerHeadColor(player)%%(player's name)%: &r%{_mes}%"
 
 		else:
-			set {_mes} to "%(player's name)%: &r%(message)%"			
+			set {_mes} to "%(player's name)%: &r%{_mes}%"			
 		
 		if {headchat}:
-			set {_mes} to "%Chat_getPlayerHeadIcon(player)%&r %{_mes}%"
+			set {_mes} to "%Chat_getPlayerHeadIcon(player)% &r%{_mes}%"
 
 		if {allmessage.%player%} is true:
 			set {_mes} to "[&a전체&f] %{_mes}%"
@@ -92,64 +75,83 @@ on chat:
 		else:
 			if {gaming.%player%} is 0:
 				set {_mes} to "[&a메인&f] %{_mes}%"
-
-			if {gaming.%player%} is 1:
+			else if {gaming.%player%} is 1:
 				set {_mes} to "[&a스무고개&f] %{_mes}%"
-
-			if {gaming.%player%} is 2:
+			else if {gaming.%player%} is 2:
 				set {_mes} to "[&a라이어|인게임&f] %{_mes}%"
-			if {gaming.%player%} is 3:
+			else if {gaming.%player%} is 3:
 				set {_mes} to "[&a라이어|관전&대기&f] %{_mes}%"
-			if {gaming.%player%} is 4:
-				set {_mes} to "[&a토론&f] %{_mes}%"
-
-			if {gaming.%player%} is 3:
-				loop all players:
-					if {gaming.%loop-player%} is 0:
-						send "%{_mes}%" to loop-player
-					if {gaming.%loop-player%} is 3:
-						send "%{_mes}%" to loop-player
-			
-			else if {gaming.%player%} is 0:
-				loop all players:
-					if {gaming.%loop-player%} is 0:
-						send "%{_mes}%" to loop-player
-					if {gaming.%loop-player%} is 3:
-						send "%{_mes}%" to loop-player
-			
 			else if {gaming.%player%} is 4:
-				if {alldebatesilence} is true:
-					if {debate.%player%.debateteam} is not 0:
-						send "&7 정숙!" to player
-						send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
-						stop
-				else if {reddebatesilence} is true:
-					if {debate.%player%.debateteam} is 2:
-						send "&7 레드 정숙!" to player
-						send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
-						stop
-				else if {bluedebatesilence} is true:
-					if {debate.%player%.debateteam} is 1:
-						send "&7 블루 정숙!" to player
-						send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
-						stop
-				else:	
-					if {leaddebatesilence} is true:
-						if {debate.%player%.debateteam} is 5:
-							send "&7 정숙!" to player
-							send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
-							stop
+				set {_mes} to "[&a토론&f] %{_mes}%"
+			else if {gaming.%player%} is 5:
+				set {_mes} to "[&a할리갈리&f] %{_mes}%"
+			else:
+				set {_mes} to "[&aDUMMY&f] %{_mes}%"
 
+			if {linkcontain} is true:
 				loop all players:
-					if {gaming.%loop-player%} is {gaming.%player%}:
-						send formatted "%{_mes}%" to loop-player
+					set {linkcontain} to false
+					if {gaming.%player%} is 0 or 3:
+						if {gaming.%loop-player%} is 0 or 3:
+							send formatted "<link:%{_link}%>%{_mes}%" to loop-player
+					else if {gaming.%player%} is 4:
+						if {alldebatesilence} is true:
+							if {debate.%player%.debateteam} is not 0:
+								send "&7 정숙!" to player
+								send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+								stop
+						else if {bluedebatesilence} is true:
+							if {debate.%player%.debateteam} is 1:
+								send "&7 블루 정숙!" to player
+								send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+								stop
+						else if {reddebatesilence} is true:
+							if {debate.%player%.debateteam} is 2:
+								send "&7 레드 정숙!" to player
+								send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+								stop
+						else if {leaddebatesilence} is true:	
+							if {debate.%player%.debateteam} is 5:
+								send "&7 정숙!" to player
+								send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+								stop
+
+						if {gaming.%player%} is {gaming.%loop-player%}:
+							send formatted "<link:%{_link}%>%{_mes}%" to loop-player
+
+					else:
+						if {gaming.%player%} is {gaming.%loop-player%}:
+							send formatted "<link:%{_link}%>%{_mes}%" to loop-player
 			else:
 				loop all players:
-					if {gaming.%loop-player%} is {gaming.%player%}:
-						send formatted "%{_mes}%" to loop-player
+					if {gaming.%player%} is 0 or 3:
+						if {gaming.%loop-player%} is 0 or 3:
+							send "%{_mes}%" to loop-player
 
-			send "[Channel:%{gaming.%player%}%] %player's name%: %message%" to console
-		
+					else if {gaming.%player%} is 4:
+						if {debate.%player%.debateteam} is 1:
+							if {bluedebatesilence} is true:
+								send "&7 블루 정숙!" to player
+								send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+								stop
+						else if {debate.%player%.debateteam} is 2:
+							if {reddebatesilence} is true:
+								send "&7 레드 정숙!" to player
+								send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+								stop
+						else if {debate.%player%.debateteam} is 5:
+							if {leaddebatesilence} is true:
+								send "&7 정숙!" to player
+								send "[정숙됨][Channel:%{gaming.%player%}%] %player's name%: %message%" to console
+								stop
+
+						if {gaming.%loop-player%} is {gaming.%player%}:
+							send formatted "%{_mes}%" to loop-player
+
+					else:
+						if {gaming.%player%} is {gaming.%loop-player%}:
+							send formatted "%{_mes}%" to loop-player
+
 command /색채팅: 
 	trigger:
 		if sender is op or console:	
@@ -206,7 +208,7 @@ command /채널목록:
 			add 1 to {channelplayer::%{gaming.%loop-player%}%}
 
 		set {_i} to 0
-		loop 5 times:
+		loop 6 times:
 			send "%{_i}%채널 : %{channelplayer::%{_i}%}%"
 			add 1 to {_i}
 

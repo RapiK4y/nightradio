@@ -17,7 +17,7 @@ command /투표 <integer>:
         else if arg-1 is 2:
             add 1 to {team2}
             set {voted::%player%} to true
-            send "&3 1번에 투표했어요"
+            send "&c 2번에 투표했어요"
 
         else:
             send " 반드시 1 또는 2중 한 개를 입력해주세요"

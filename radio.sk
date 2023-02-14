@@ -13,9 +13,9 @@ on rightclick with spawn egg:
 #    send "스탠드 ㄴㄴ"
 
 on join:
-    execute command "effect give %player% saturation 99999 1 true"
     wait 1 second
-    broadcast formatted "<link:https://sync-tube.de/room/U7xHwIiR>§3&l[LINK]"
+    execute command "effect give %player% saturation 99999 1 true"
+    broadcast formatted "<link:https://sync-tube.de/room/1IzqfiBm>§3&l[LINK]"
 
 on respawn:
     wait 5 ticks
@@ -77,20 +77,11 @@ on rightclick on anvil:
     if player is not op:
         cancel event
 
-command /광산 [<OfflinePlayer>]:
-    permission: op
-    trigger:
-        if {mine.%arg-1%} is 1:
-            teleport arg-1 to location(91.5, -21, 208, world "world", -180, 0)
-            set {mine.%arg-1%} to 0
-            
-            loop 36 times:
-                remove diamond pickaxe from arg-1's inventory
-        else:
-            set {mine.%arg-1%} to 1
-            teleport arg-1 to location(91.5, -21, 213, world "world", 0, 0)
-
 command /npc낚시랭킹 <player>:
     permission: op
     trigger:
         make arg-1 execute command "emf top"
+
+on damage:
+    if damage was caused by drowning:
+        cancel event
