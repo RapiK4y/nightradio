@@ -13,23 +13,9 @@ command /스무고개npc <OfflinePlayer>:
     permission: op
     trigger:
         if {gaming.%arg-1%} is 0:
-            send "{@t} 스무고개에 입장합니다." to arg-1
-            set {gaming.%arg-1%} to 1
-            add 1 to {appliedplayer}
-            teleport arg-1 to location(172.5, -21, 151.5, world "world", -90, 0)
-            play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to arg-1
-        else if {gaming.%arg-1%} is 1:
-            send "{@t} 스무고개에서 퇴장했습니다." to arg-1
-            set {gaming.%arg-1%} to 0
-            subtract 1 from {appliedplayer}
-            teleport arg-1 to location(170.5, -21, 151.5, world "world", 90, 0)
-            play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to arg-1
+            teleport arg-1 to location(169.5, -21, 151.5, world "world", -90, 0)
         else if {gaming.%arg-1%} is 3:
-            send "{@t} 스무고개에 입장합니다." to arg-1
-            set {gaming.%arg-1%} to 1
-            add 1 to {appliedplayer}
-            teleport arg-1 to location(172.5, -21, 151.5, world "world", -90, 0)
-            play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to arg-1
+            teleport arg-1 to location(169.5, -21, 151.5, world "world", -90, 0)
         else:
             send "{@t} 다른 게임 중일 땐 스무고개에 참여할 수 없어요" to arg-1
 
@@ -39,23 +25,19 @@ command /스무고개:
             send "{@t} 스무고개에 입장합니다." to player
             set {gaming.%player%} to 1
             add 1 to {appliedplayer}
-            teleport player to location(172.5, -21, 151.5, world "world", -90, 0)
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
         else if {gaming.%player%} is 1:
             send "{@t} 스무고개에서 퇴장했습니다." to player
             set {gaming.%player%} to 0
             subtract 1 from {appliedplayer}
-            teleport player to location(170.5, -21, 151.5, world "world", 90, 0)
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
         else if {gaming.%player%} is 3:
             send "{@t} 스무고개에 입장합니다." to player
             set {gaming.%player%} to 1
             add 1 to {appliedplayer}
-            teleport player to location(172.5, -21, 151.5, world "world", -90, 0)
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
         else:
             send "{@t} 다른 게임 중일 땐 스무고개에 참여할 수 없어요" to player
-
 
 command /라이어게임npc <OfflinePlayer>:
     permission: op
@@ -103,7 +85,6 @@ command /라이어게임:
                 play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
             else:
                 send "{@t} 라이어 대기방에 입장합니다." to player
-                teleport player to location(186.5, -21, 128.5, world "world", 180, 0)
                 set {gaming.%player%} to 2
                 play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
         else:
@@ -114,47 +95,56 @@ command /라이어게임:
                 else:
                     set {gaming.%player%} to 0
                     send "{@t} 라이어 대기방에서 퇴장합니다."
-                    teleport player to location(186.5, -21, 130.5, world "world", 0, 0)
                     play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
-                    set {liarnextjoin.%player%} to false
             else:
                 if {ingame} is true:
                     send "{@t} 게임이 진행중일 땐 로비로 나갈 수 없습니다."
                 else:
                     send "{@t} 라이어 대기방에서 나갑니다."
-                    teleport player to location(186.5, -21, 130.5, world "world", 0, 0)
                     set {gaming.%player%} to 0
                     play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
 
 command /토론:
     trigger:
         if {gaming.%player%} is 0:
-            send "{@t} 토론장으로 이동합니다." to player
-            teleport player to location(126.5, -15, 82.5, world "world", 180, 0)
+            send "{@t} 토론장에 입장합니다." to player
             set {gaming.%player%} to 4
             set {debate.%player%.debateteam} to 5
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
 
         else:
-            send "{@t} 토론장에서 나옵니다." to player
-            teleport player to location(126.5, -15, 86.5, world "world", 0, 0)
+            send "{@t} 토론장에서 퇴장합니다." to player
             set {gaming.%player%} to 0
             delete {debate.%player%.debateteam}
+            execute console command "토론팀제거console %player%"
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
 
 command /토론npc <OfflinePlayer>:
     permission: op
     trigger:
         if {gaming.%arg-1%} is 0:
-            send "{@t} 토론장으로 이동합니다." to arg-1
+            send "{@t} 토론장에 입장합니다." to arg-1
             teleport arg-1 to location(126.5, -15, 82.5, world "world", 180, 0)
             set {gaming.%arg-1%} to 4
             set {debate.%arg-1%.debateteam} to 5
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to arg-1
 
         else:
-            send "{@t} 토론장에서 나옵니다." to arg-1
+            send "{@t} 토론장에서 퇴장합니다." to arg-1
             teleport arg-1 to location(126.5, -15, 86.5, world "world", 0, 0)
             set {gaming.%arg-1%} to 0
             delete {debate.%arg-1%.debateteam}
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to arg-1
+
+command /할리갈리:
+    trigger:
+        if {gaming.%player%} is 0:
+            send "{@t} 할리갈리에 입장합니다." to player
+            set {gaming.%player%} to 5
+            play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
+        else if {gaming.%player%} is 5:
+            send "{@t} 할리갈리에서 퇴장합니다." to player
+            set {gaming.%player%} to 0
+            play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
+        else:
+            send "{@t} 다른 게임 중일 땐 사용할 수 없습니다!"

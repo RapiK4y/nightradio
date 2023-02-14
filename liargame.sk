@@ -1,0 +1,17 @@
+command /라이어초기화:
+    permission: op
+    trigger:
+        clear
+
+command /라이어시작:
+    permission: op
+    trigger:
+        loop all players:
+            if {gaming.%loop-player%} is 3:
+                if {liarwaiting.%player%} is true:
+                    
+
+function Liarend():
+    loop all players:
+        if {gaming.%player%} is 2:
+            set {gaming.%player%} to 3

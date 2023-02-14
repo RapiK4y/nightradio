@@ -169,6 +169,9 @@ on right click holding paper:
 		cancel event
 	
 on right click on birch button:
+	if {gaming.%player%} is not 5:
+		stop
+
 	if {time} = 0:
 		if amount of {fruit::%player%::*} >= 1:
 			loop all players:
@@ -327,11 +330,19 @@ command /할리갈리시작:
 			add "&a라임 %loop-value%" to {allcard::*}
 		loop {Plum::*}:
 			add "&5자두 %loop-value%" to {allcard::*}
+		broadcast "333 | deckCT: %{deckCT}%"
 		loop {allcard::*}:
 			set {deckCT} to last element out of all indexes of {allcard::*} parsed as integer
+		broadcast "336 | deckCT: %{deckCT}%"
+
+		set {_gameplayercount} to 1
+
 		loop all players:
-			if {gaming.%loop-player%} is 5:	
-				add loop-player to {GamePlayer::*}	
+			if {gaming.%loop-player%} is 5:
+				set {GamePlayer::%{_gameplayercount}%} to loop-player
+				add 1 to {_gameplayercount}
+				broadcast "344 | test"
+
 		loop all players:
 			if {gaming.%loop-player%} is 5:
 				send "&e카드를 등록했습니다!" to loop-player
@@ -339,13 +350,18 @@ command /할리갈리시작:
 				send "&e게임 플레이어의 수 : %amount of {GamePlayer::*}%명" to loop-player
 		wait 30 ticks
 		set {givecard} to {deckCT} / amount of {GamePlayer::*}
-		broadcast "&e플레이어에게 카드를 배분중입니다.."
-		loop {givecard} time:
+		broadcast "353 | givecard: %{givecard}%, deckCT: %{deckCT}%"
+		loop all players:
+			if {gaming.%player%} is 5:
+				send "&e플레이어에게 카드를 배분중입니다.." to loop-player
+
+		loop {givecard} time:	
 			loop all players:
-				set {Rb} to random element out of {allcard::*}
-				add {Rb} to {fruit::%loop-player%::*}
-				remove {Rb} from {allcard::*}
-				remove 1 from {deckCT}
+				if {gaming.%player%} is 5:
+					set {Rb} to random element out of {allcard::*}
+					add {Rb} to {fruit::%loop-player%::*}
+					remove {Rb} from {allcard::*}
+					remove 1 from {deckCT}
 				#broadcast "%loop-player%의 카드 : %{fruit::%loop-player%::*}%"
 				#broadcast "남은 카드 : %{deckCT}%장"
 			if {deckCT} is 0:
@@ -356,47 +372,67 @@ command /할리갈리시작:
 			loop all players:
 				if {gaming.%loop-player%} is 5:
 					send "&c카드를 전부 배분하지 못했습니다. 게임의 진행이 막힐수있습니다." to loop-player
+		broadcast "%{deckCT}%"
 		wait 30 ticks
 		set {list} to 0
-			loop all players:
-				if {gaming.%loop-player%} is 5:
-					send "플레이어가 정해집니다" to loop-player
-					set {_p::*} to loop-player
+		loop all players:
+			if {gaming.%loop-player%} is 5:
+				send "플레이어가 정해집니다" to loop-player
+		set {_p::*} to {GamePlayer::*}
 		delete {p::*}
 		delete {gp::*}
 		loop amount of {GamePlayer::*} time:
 			set {_r} to random element out of {_p::*}
 			add {_r} to {p::*}
 			remove {_r} from {_p::*}
-			broadcast "%{_r}%"
+			loop all players:
+				if {gaming.%loop-player%} is 5:
+					send "%{_r}%" to loop-player
 		wait 1 seconds
-		broadcast "카드를 내는 순서를 정합니다"
+		loop all players:
+			if {gaming.%loop-player%} is 5:
+				send "카드를 내는 순서를 정합니다" to loop-player
 		loop amount of {p::*} time:
 			set {_r} to random element out of {p::*}
 			remove {_r} from {p::*}
 			add 1 to {list}
-			broadcast "%{list}%번째 %{_r}%"
+
+			loop all players:
+				if {gaming.%loop-player%} is 5:
+					send "%{list}%번째 %{_r}%" to loop-player
+
 			add {_r} to {gp::*}
 		set {list} to 1
-		if amount of all players is 1:
-			broadcast "인원이 맞지 않습니다"
-			give all players paper named "&l카드"
-		if amount of all players is 2:
-			broadcast "2명 30장씩 카드를 나눠서 시작합니다"
-			give all players paper named "&l카드"
-		if amount of all players is 3:
-			broadcast "3명 20장씩 카드를 나눠서 시작합니다"
-			give all players paper named "&l카드"
-		if amount of all players is 4:
-			broadcast "4명 15장씩 카드를 나눠서 시작합니다"
-			give all players paper named "&l카드"
-		if amount of all players is 5:
-			broadcast "5명 12장씩 카드를 나눠서 시작합니다"
-			give all players paper named "&l카드"
-		if amount of all players is 6:
-			broadcast "6명 10장씩 카드를 나눠서 시작합니다"
-			give all players paper						
-		broadcast "게임을 시작합니다"
+
+		set {_stack} to 0
+
+		loop all players:
+			if {gaming.%loop-player%} is 5:
+				add 1 to {_stack}
+
+		loop all players:
+			if {gaming.%loop-player%} is 5:
+				if {_stack} is 1:
+					send "인원이 맞지 않습니다" to loop-player
+					give loop-player paper named "&l카드"
+				if {_stack} is 2:
+					send "2명 30장씩 카드를 나눠서 시작합니다" to loop-player
+					give loop-player paper named "&l카드"
+				if {_stack} is 3:
+					send "3명 20장씩 카드를 나눠서 시작합니다" to loop-player
+					give loop-player paper named "&l카드"
+				if {_stack} is 4:
+					send "4명 15장씩 카드를 나눠서 시작합니다" to loop-player
+					give loop-player paper named "&l카드"
+				if {_stack} is 5:
+					send "5명 12장씩 카드를 나눠서 시작합니다" to loop-player
+					give loop-player paper named "&l카드"
+				if {_stack} is 6:
+					send "6명 10장씩 카드를 나눠서 시작합니다" to loop-player
+					give loop-player paper named "&l카드"		
+				else:
+					broadcast "value : %{_stack}%, i eql? | %loop-player%"				
+				send "게임을 시작합니다" to loop-player
 
 #楠 바나나1
 #ꈂ	바나나2
