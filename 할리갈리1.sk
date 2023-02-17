@@ -4,9 +4,7 @@ options: #카드 갯수
 	Fruit3: 3,3,3     #default: 3,3,3
 	Fruit4: 4,4       #default: 4,4
 	Fruit5: 5     	  #default: 5
-
-on load:
-	broadcast " ld done check rm?"
+	t: &7[&3&l!&7]
 
 on unload:
 	clear {allcard::*}
@@ -122,6 +120,11 @@ on right click holding paper:
 					add {_value} to {라임}				
 				if {list} > amount of {gp::*}:
 					set {list} to 1
+
+				loop all players:
+					if {gaming.%loop-player%} is 5:
+						send title "&6&l테이블 &f%{tableshow::*}%" with subtitle "&a&l쌓인 카드 &f&l%amount of {trash::*}%장" to loop-player for 100 seconds
+
 				if amount of {hand::%player%::*} > 0:
 					loop all players:
 						if {gaming.%loop-player%} is 5:
@@ -129,6 +132,7 @@ on right click holding paper:
 							send "&6&l%player%이(가) 낸 카드 : &f%last element of {tableshow::*}%" to loop-player
 							send "" to loop-player
 							send "&6&l%player%&f의 남은 카드 수 : &e&l%last element out of all indexes of {hand::%player%::*}%&f장" to loop-player
+					send action bar "남은 카드 수 : &e&l%last element out of all indexes of {hand::%player%::*}%&f장" to player
 					wait 15 ticks
 
 					loop all players:
@@ -144,6 +148,7 @@ on right click holding paper:
 							send "" to loop-player
 							send "&6&l%player%&f의 남은 카드 수 : &e&l없음" to loop-player
 							send "===================================================" to loop-player
+					send action bar "남은 카드 수 :&e&l없음" to player
 					remove "%player%" from {gp::*}
 					subtract 1 from {list}
 					set {gp::*} to {gp::*}
@@ -152,6 +157,8 @@ on right click holding paper:
 							send "&4&l%player%가 탈락했습니다! &6&l%{gp::%{list}%}%&7의 차례입니다" to loop-player
 					if {list} > "%amount of {gp::*}%":
 						set {list} to 1
+					
+					execute console command "haligaliwin"
 			else:
 				send "&c&l%player%님은 가지고 있는 카드가 없습니다!"
 		else:
@@ -171,6 +178,10 @@ on right click holding paper:
 on right click on birch button:
 	if {gaming.%player%} is not 5:
 		stop
+
+	if {haligalistart} is not true:
+		set {haligalistart} to true
+		execute console command "할리갈리시작"
 
 	if {time} = 0:
 		if amount of {fruit::%player%::*} >= 1:
@@ -287,22 +298,29 @@ command /할리갈리리셋:
 		set {바나나} to 0
 		set {라임} to 0
 		set {time} to 0
-		set {timec} to 0
-
-every 1 tick:
-	loop all players:
-		if {gaming.%loop-player%} is 5:
-			send action bar "&6&l테이블 &f%{tableshow::*}% &a&l쌓인 카드 &f&l%amount of {trash::*}%장" to loop-player 
+		set {timec} to 0 
 		
-command /win:
+command /haligaliwin:
 	trigger:
 		if amount of {gp::*} is 1:
 			broadcast "&a&l%{gp::1}%가 할리갈리에서 이겼습니다!"
 			play sound "item.goat_horn.sound.0" with volume 2 at player
+			execute console command "fill 198 -20 154 198 -19 152 minecraft:air replace"
+			set {haligalistart} to false
+
+command /할리갈리강제종료:
+	permission: op
+	trigger:
+		loop all players:
+			if {gaming.%loop-player%} is 5:	
+				send "{@t} 할리갈리가 강제종료 되었습니다." to loop-player
+		set {haligalistart} to false
+		execute console command "fill 198 -20 154 198 -19 152 minecraft:air replace"
 			
 command /할리갈리시작:
 	permission: op
 	trigger:
+		execute console command "fill 198 -20 154 198 -19 152 minecraft:barrier"
 		clear {allcard::*}
 		clear {fruit::*}
 		clear {deckCT}
@@ -330,10 +348,8 @@ command /할리갈리시작:
 			add "&a라임 %loop-value%" to {allcard::*}
 		loop {Plum::*}:
 			add "&5자두 %loop-value%" to {allcard::*}
-		broadcast "333 | deckCT: %{deckCT}%"
 		loop {allcard::*}:
 			set {deckCT} to last element out of all indexes of {allcard::*} parsed as integer
-		broadcast "336 | deckCT: %{deckCT}%"
 
 		set {_gameplayercount} to 1
 
@@ -341,8 +357,6 @@ command /할리갈리시작:
 			if {gaming.%loop-player%} is 5:
 				set {GamePlayer::%{_gameplayercount}%} to loop-player
 				add 1 to {_gameplayercount}
-				broadcast "344 | test"
-
 		loop all players:
 			if {gaming.%loop-player%} is 5:
 				send "&e카드를 등록했습니다!" to loop-player
@@ -350,14 +364,13 @@ command /할리갈리시작:
 				send "&e게임 플레이어의 수 : %amount of {GamePlayer::*}%명" to loop-player
 		wait 30 ticks
 		set {givecard} to {deckCT} / amount of {GamePlayer::*}
-		broadcast "353 | givecard: %{givecard}%, deckCT: %{deckCT}%"
 		loop all players:
 			if {gaming.%player%} is 5:
 				send "&e플레이어에게 카드를 배분중입니다.." to loop-player
 
 		loop {givecard} time:	
 			loop all players:
-				if {gaming.%player%} is 5:
+				if {gaming.%loop-player%} is 5:
 					set {Rb} to random element out of {allcard::*}
 					add {Rb} to {fruit::%loop-player%::*}
 					remove {Rb} from {allcard::*}
@@ -430,9 +443,8 @@ command /할리갈리시작:
 				if {_stack} is 6:
 					send "6명 10장씩 카드를 나눠서 시작합니다" to loop-player
 					give loop-player paper named "&l카드"		
-				else:
-					broadcast "value : %{_stack}%, i eql? | %loop-player%"				
-				send "게임을 시작합니다" to loop-player
+				else:			
+					send "게임을 시작합니다" to loop-player
 
 #楠 바나나1
 #ꈂ	바나나2
