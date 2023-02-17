@@ -6,10 +6,59 @@ command /라이어초기화:
 command /라이어시작:
     permission: op
     trigger:
+
+function Liarstart():
+    set {_n} to 1
+    delete {liargameplayer::*}
+    set {liarplayerallselected} to false
+
+    if Joinedplayer_InLiar() is 1:
         loop all players:
             if {gaming.%loop-player%} is 3:
-                if {liarwaiting.%player%} is true:
-                    
+                send " 대기중인 플레이어가 8명을 초과합니다. 랜덤뽑기를 시작합니다." to loop-player
+        Liar_SelectPlayer()
+    else:
+        loop all players:
+            if {gaming.%loop-player%} is 3:
+                send " 대기중인 플레이어가 8명 미만입니다. 바로 순서를 정합니다." to loop-player
+        Liar_SelectPlayer()
+
+    loop all players:
+        if {gaming.%loop-player%} is 2:
+            send " 총 %amount of {liargameplayer::*}%명이 라이어게임에 참여합니다."
+
+    loop all players:
+        if {gaming.%loop-player%} is true:
+            set {liar} to loop-player
+
+function Joinedplayer_InLiar():: num:
+    set {_count} to 0
+
+    loop all players:
+        if {gaming.%loop-player} is 3:
+            if {liarwaiting.%loop-player%} is true:
+                set {liargameplayer::%{_count}%} to loop-player
+
+        if amount of {liargameplayer::*} > 8:
+            return 1
+        else:   
+            return 0
+
+function Liar_SelectPlayer():
+    set {_teamcount} to 0
+
+    while true:
+        set {_randomplayer} to random player
+
+        if {liarwaiting.%{_randomplayer}%} is true:
+            set {liarteam::%{_teamcount}%} to {_randomplayer}
+            add 1 to {_teamcount}
+
+        if {_teamcount} >= amount of {liargameplayer::*}:
+            loop stop
+        else if {_teamcount >= 8}:
+            loop stop
+
 
 function Liarend():
     loop all players:
