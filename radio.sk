@@ -15,7 +15,7 @@ on rightclick with spawn egg:
 on join:
     wait 1 second
     execute command "effect give %player% saturation 99999 1 true"
-    broadcast formatted "<link:https://sync-tube.de/room/1IzqfiBm>§3&l[LINK]"
+    send formatted "<link:https://sync-tube.de/room/VbXC9d8g>§3&l================[LINK]================" to player
 
 on respawn:
     wait 5 ticks
@@ -50,6 +50,14 @@ function boatcooldown(p: player):
     set {boat::%{_p}%} to 1
     wait 60 seconds
     set {boat::%{_p}%} to 0
+
+command /보트status <OfflinePlayer> [<num>]:
+    permission: op
+    trigger:
+        broadcast "%arg-1% : %{boat::%arg-1%}%"
+        if arg-2 is set:
+            set {boat::%arg-1%} to arg-2
+            broadcast "Set : %arg-2%"
 
 command /니지카검거 <OfflinePlayer>:
     permission: op

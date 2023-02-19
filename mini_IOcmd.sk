@@ -85,7 +85,7 @@ command /라이어게임:
                 play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
             else:
                 send "{@t} 라이어 대기방에 입장합니다." to player
-                set {gaming.%player%} to 2
+                set {gaming.%player%} to 3
                 play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
         else:
             if {gaming.%player%} is not 2:
@@ -144,6 +144,8 @@ command /할리갈리:
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
         else if {gaming.%player%} is 5:
             send "{@t} 할리갈리에서 퇴장합니다." to player
+            send title " " with subtitle " " to player
+            send action bar " " to player
             set {gaming.%player%} to 0
             play sound "ENTITY_PLAYER_LEVELUP" with volume 0.7 to player
         else:

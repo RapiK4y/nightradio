@@ -86,18 +86,6 @@ command /seen [<OfflinePlayer>]:
         else:
             message "{@t} 사용법: /seen <플레이어>" to the player
 
-command /chat:
-    permission: op
-    trigger:
-        if {chattings} is true:
-            set {chattings} to false
-            broadcast "{@t} 서버 채팅이 비활성화되었습니다."
-            play sound "BLOCK_BEACON_DEACTIVATE" to all players
-        else if {chattings} is false:
-            set {chattings} to true
-            broadcast "{@t} 서버 채팅이 활성화되었습니다."
-            play sound "BLOCK_BEACON_ACTIVATE" to all players
-
 command /pvp:
     permission: op
     trigger:
@@ -109,23 +97,6 @@ command /pvp:
             set {pvp} to true   
             broadcast "{@t} PVP가 활성화되었습니다."
             play sound "BLOCK_BEACON_ACTIVATE" to all players
-
-command /mute [<OfflinePlayer>]:
-    permission: op
-    trigger:
-        if arg-1 is set:
-            if arg-1 is online:
-                if {mutes.%arg-1%} is true:
-                    set {mutes.%arg-1%} to false
-                    broadcast "{@t} &c%arg-1%&7님의 벙어리 상태가 해제되었습니다."
-                else if {mutes.%arg-1%} is not true:
-                    set {mutes.%arg-1%} to true
-                    broadcast "{@t} &c%arg-1%&7님이 벙어리가 되었습니다."
-                    play sound "BLOCK_ANVIL_PLACE" to all players
-            else:
-                message "{@t} &a%arg-1%&7은(는) 현재 오프라인입니다." to the player
-        else:
-            message "{@t} 사용법: /mute <플레이어>" to the player
 
 command /gm [<text>] [<OfflinePlayer>]:
     permission: op

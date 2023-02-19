@@ -14,11 +14,18 @@ on chat:
         replace all "됬" with "&c됬&f" in message
         kick player due to "&c&l됐"
     
+    if message contain "령":
+        replace all "령" with "영&f" in message
+    
+    if message contain "용":
+        replace all "용" with "룡&f" in message
+        
     if message contains "애캐배":
         replace all "애캐배" with "애어허" in message
 
     if message contains "유라":
         replace all "유라" with "<##99B3C6>&l유라&f" in message
+        send action bar "                       <f:char>" to player
 
     if message contains "료":
         if message contains "료땅":
@@ -70,6 +77,7 @@ on chat:
 
     if message contains "구라":
         replace all "구라" with "<##0080FF>&l구라&f" in message
+        send action bar "                       <f:char>" to player
 
     if message contains "루시아":
         replace all "루시아" with "<##58FAAC>&l루시아&f" in message
@@ -91,4 +99,13 @@ on chat:
     
     if message contains "칸나":
         replace all "칸나" with "<##9A2EFE>&l칸나&f" in message
-        
+        send action bar "                       <f:char>" to player
+    
+    if message contain "야란":
+        send action bar "                       <f:char>" to player
+
+    if message contain "짱구":
+        if message contain "신짱구":
+            replace all "신짱구" with "<##221815>&l신<##e3002c>&l짱<##fff796>&l구&f" in message
+        else:
+            replace all "짱구" with "<##e3002c>&l짱<##fff796>&l구&f" in message

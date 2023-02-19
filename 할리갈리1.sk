@@ -152,11 +152,17 @@ on right click holding paper:
 					remove "%player%" from {gp::*}
 					subtract 1 from {list}
 					set {gp::*} to {gp::*}
+
+					if {list} is 0:
+						set {list} to 1
+						
+					if {list} > "%amount of {gp::*}%":
+						set {list} to 1
+
 					loop all players:
 						if {gaming.%loop-player%} is 5:
 							send "&4&l%player%가 탈락했습니다! &6&l%{gp::%{list}%}%&7의 차례입니다" to loop-player
-					if {list} > "%amount of {gp::*}%":
-						set {list} to 1
+					
 					
 					execute console command "haligaliwin"
 			else:
@@ -259,17 +265,26 @@ on right click on birch button:
 					remove "%player%" from {gp::*}
 					subtract 1 from {list}
 					set {gp::*} to {gp::*}
+
+					if {list} is 0:
+						set {list} to 1
+					
+					if {list} > "%amount of {gp::*}%":
+						set {list} to 1
+
 					loop all players:
 						if {gaming.%loop-player%} is 5:	
 							send "&4&l%player%가 탈락했습니다! &6&l%{gp::%{list}%}%&7의 차례입니다" to loop-player
-					if {list} > "%amount of {gp::*}%":
-						set {list} to 1
+
+					execute console command "haligaliwin"
+
 		else if amount of {trash::*} = 0:
 			send "쌓인 카드가 없습니다"
 			if amount of {fruit::%player%::*} = 0:
 				remove "%player%" from {gp::*}
 				subtract 1 from {list}
 				set {gp::*} to {gp::*}
+
 				if {list} > "%amount of {gp::*}%":
 					set {list} to 1
 		else:
@@ -280,13 +295,15 @@ on right click on birch button:
 	else:
 		stop
 
-command /br:
-	trigger:
-		loop all players:
-			if {gaming.%loop-player%} is 5:	
-				send "자두 %{자두}% 바나나 %{바나나}% 딸기 %{딸기}% 라임 %{라임}%" to loop-player
-				send "%last element of {tableshow::*}%" to loop-player
-		
+#command /br:
+#	trigger:
+#		loop all players:
+#			if {gaming.%loop-player%} is 5:	
+#				send "자두 %{자두}% 바나나 %{바나나}% 딸기 %{딸기}% 라임 %{라임}%" to loop-player
+#				send "%last element of {tableshow::*}%" to loop-player
+#				send "%{list}%" to loop-player
+#/				send "%amount of {gp::*}%"
+
 command /할리갈리리셋:
 	permission: op
 	trigger:
@@ -307,7 +324,7 @@ command /haligaliwin:
 			play sound "item.goat_horn.sound.0" with volume 2 at player
 			execute console command "fill 198 -20 154 198 -19 152 minecraft:air replace"
 			set {haligalistart} to false
-
+			
 command /할리갈리강제종료:
 	permission: op
 	trigger:
@@ -320,6 +337,9 @@ command /할리갈리강제종료:
 command /할리갈리시작:
 	permission: op
 	trigger:
+		loop all players:
+			if {gaming.%loop-player%} is 5:
+				send title " " with subtitle " " to loop-player
 		execute console command "fill 198 -20 154 198 -19 152 minecraft:barrier"
 		clear {allcard::*}
 		clear {fruit::*}
