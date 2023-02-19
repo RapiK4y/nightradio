@@ -1,13 +1,16 @@
 command /라이어초기화:
     permission: op
     trigger:
-        clear
 
-command /라이어시작:
+command /라이어시작 [<text>]:
     permission: op
     trigger:
+        if arg-1 is set:
+            Liarstart(arg-1)
+        else:
+            Liarstart("Ryeong")
 
-function Liarstart():
+function Liarstart(t: text):
     set {_n} to 1
     delete {liargameplayer::*}
     set {liarplayerallselected} to false
@@ -25,17 +28,69 @@ function Liarstart():
 
     loop all players:
         if {gaming.%loop-player%} is 2:
-            send " 총 %amount of {liargameplayer::*}%명이 라이어게임에 참여합니다."
+            send " 총 %amount of {liargameplayer::*}%명이 라이어게임에 참여합니다." to loop-player
+
+    set {villager_number} to amount of {liargameplayer::*}
+    subtract 2 from {villager_number}
+
+    set {_leftcount} to 0
+    while true:
+        set {_randomplayer} to random player out of {liargameplayer::*}
+
+        if {gaming.%{_randomplayer}%} is 2:
+            if {liar} is not set:
+                set {liar} to {_randomplayer}
+                send " 당신은 라이어입니다." to {_randomplayer}
+            else if {spy} is not set:
+                set {spy} to {_randomplayer}
+                send " 당신은 스파이입니다." to {_randomplayer}
+            else:
+                add 1 to {_leftcount}
+                if {_leftcount} is {villager_number}:
+                    stop loop
 
     loop all players:
-        if {gaming.%loop-player%} is true:
-            set {liar} to loop-player
+        if {gaming.%loop-player%} is 2 or 3:
+            send "라이어와 스파이가 정해졌습니다. 게임을 시작합니다." to loop-player
 
-function Joinedplayer_InLiar():: num:
+    wait 2 seconds
+
+    Liar_Teleport()
+
+    if {_t} is not "ttttt":
+        loop all players:
+            if {gaming.%loop-player%} is 2 or 3:
+                if {liar} is not loop-player:
+                    send " 이번 제시어는 %{_t}%입니다." to loop-player
+                    send title "&3제시어:&f %{_t}%" to loop-player
+                else:
+                    send " 이번 제시어는 ???입니다." to loop-player
+                    send title "&3제시어:&f ???" to loop-player
+    else:
+        loop all players:
+            if {gaming.%loop-player%} is 2 or 3:
+                if {liar} is not loop-player:
+                    send " 이번 제시어는 %{liarrandomtext}%입니다." to loop-player
+                    send title "&3제시어:&f %{liarrandomtext}%" to loop-player
+                else:
+                    send " 이번 제시어는 ???입니다." to loop-player
+                    send title "&3제시어:&f ???" to loop-player
+
+function Liar_Teleport():
+    teleport {liarteam::1} to location
+    teleport {liarteam::2} to
+    teleport {liarteam::3} to
+    teleport {liarteam::4}
+    teleport {liarteam::5}
+    teleport {liarteam::6}
+    teleport {liarteam::7}
+    teleport {liarteam::8}
+
+function Joinedplayer_InLiar() :: integer:
     set {_count} to 0
 
     loop all players:
-        if {gaming.%loop-player} is 3:
+        if {gaming.%loop-player%} is 3:
             if {liarwaiting.%loop-player%} is true:
                 set {liargameplayer::%{_count}%} to loop-player
 
@@ -48,19 +103,24 @@ function Liar_SelectPlayer():
     set {_teamcount} to 0
 
     while true:
-        set {_randomplayer} to random player
+        set {_randomplayer} to random player out of {liargameplayer::*}
 
         if {liarwaiting.%{_randomplayer}%} is true:
             set {liarteam::%{_teamcount}%} to {_randomplayer}
             add 1 to {_teamcount}
 
         if {_teamcount} >= amount of {liargameplayer::*}:
-            loop stop
-        else if {_teamcount >= 8}:
-            loop stop
-
+            stop loop
+        
+        else if {_teamcount} >= 8:
+            stop loop
 
 function Liarend():
+    delete {liarteam::*}
+    delete {liargameplayer::*}
+    delete {spy}
+    delete {liar}
+
     loop all players:
-        if {gaming.%player%} is 2:
-            set {gaming.%player%} to 3
+        if {gaming.%loop-player%} is 2:
+            set {gaming.%loop-player%} to 3
